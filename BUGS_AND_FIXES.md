@@ -1,0 +1,165 @@
+# PTODA Booking System — Bugs, Mistakes & Fixes Log
+
+> This document tracks every mistake, issue, or bug encountered during development — including the cause and the fix applied. Use this as a living document; add entries as they happen.
+
+---
+
+## How to Add an Entry
+
+```
+### [BUG-XXX] Short title
+- **Date:** YYYY-MM-DD
+- **Phase:** Phase N — Section name
+- **File(s) affected:** `path/to/file.php` or `FileName.kt`
+- **Description:** What went wrong.
+- **Root cause:** Why it happened.
+- **Fix applied:** What was changed to resolve it.
+- **Prevention tip:** How to avoid this in the future.
+```
+
+---
+
+## Log Entries
+
+---
+
+### [BUG-001] Project folder not accessible via XAMPP
+
+- **Date:** _(fill in when encountered)_
+- **Phase:** Phase 1 — Environment Setup
+- **File(s) affected:** `httpd-vhosts.conf` / XAMPP config
+- **Description:** Opening `http://localhost/ptoda_booking_api/` returns 403 Forbidden or 404 Not Found.
+- **Root cause:** XAMPP Apache does not have read permissions on the project folder, or `mod_rewrite` is not enabled.
+- **Fix applied:**
+  1. Ensure the folder is inside `C:\xampp\htdocs\`.
+  2. In `C:\xampp\apache\conf\httpd.conf`, confirm `mod_rewrite` is uncommented: `LoadModule rewrite_module modules/mod_rewrite.so`
+  3. Set `AllowOverride All` for the `htdocs` directory block.
+  4. Restart Apache in XAMPP Control Panel.
+- **Prevention tip:** Always enable `mod_rewrite` and `AllowOverride All` before starting API development with `.htaccess` rewrites.
+
+---
+
+### [BUG-002] Android Emulator cannot reach localhost API
+
+- **Date:** _(fill in when encountered)_
+- **Phase:** Phase 5 — Integration Testing
+- **File(s) affected:** `utils/Constants.kt`
+- **Description:** API calls from Android Emulator return `Connection refused` or timeout.
+- **Root cause:** The Android Emulator's `localhost` (127.0.0.1) refers to the emulator itself, not the development PC.
+- **Fix applied:** Changed base URL in `Constants.kt` from `http://localhost/ptoda_booking_api/` to `http://10.0.2.2/ptoda_booking_api/`.
+- **Prevention tip:** Always use `10.0.2.2` for emulator → host machine communication. For physical devices, use the PC's local network IP (e.g., `192.168.1.x`).
+
+---
+
+### [BUG-003] JWT token not sent with API requests
+
+- **Date:** _(fill in when encountered)_
+- **Phase:** Phase 4 — Android App (Networking Layer)
+- **File(s) affected:** `data/api/ApiClient.kt`
+- **Description:** Protected API endpoints return `401 Unauthorized` even after login.
+- **Root cause:** JWT token was saved in `PrefsManager` but never attached to outgoing Retrofit requests.
+- **Fix applied:** Added an OkHttp `Interceptor` in `ApiClient.kt` that reads the token from `PrefsManager` and injects the `Authorization: Bearer <token>` header on every request.
+- **Prevention tip:** Set up the auth interceptor in `ApiClient` before building any screen that calls protected endpoints.
+
+---
+
+### [BUG-004] PHP API returns HTML error page instead of JSON
+
+- **Date:** _(fill in when encountered)_
+- **Phase:** Phase 3 — PHP REST API
+- **File(s) affected:** `index.php`, `controllers/*.php`
+- **Description:** Android app receives a Gson parse error; the API response body is an HTML Apache/PHP error page.
+- **Root cause:** A PHP fatal error or uncaught exception caused Apache to return an HTML error page. `Content-Type: application/json` header was not set before any output.
+- **Fix applied:**
+  1. Added `header('Content-Type: application/json');` at the very top of `index.php`.
+  2. Added a global `set_exception_handler` and `set_error_handler` in `index.php` to catch all errors and return a JSON error response.
+- **Prevention tip:** Always set JSON content-type header first. Use a global error handler so no raw PHP errors ever leak as HTML to the client.
+
+---
+
+### [BUG-005] `google-services.json` missing or in wrong location
+
+- **Date:** _(fill in when encountered)_
+- **Phase:** Phase 4 — Firebase Cloud Messaging
+- **File(s) affected:** `app/google-services.json`
+- **Description:** Android build fails with `File google-services.json is missing`.
+- **Root cause:** `google-services.json` was placed in the project root instead of the `app/` module directory.
+- **Fix applied:** Moved `google-services.json` into `PTODAApp/app/google-services.json`.
+- **Prevention tip:** Firebase always requires `google-services.json` to be inside the `app/` directory, not the project root.
+
+---
+
+### [BUG-006] FCM token not updated after app reinstall
+
+- **Date:** _(fill in when encountered)_
+- **Phase:** Phase 4 — Firebase Cloud Messaging
+- **File(s) affected:** `services/PTODAFirebaseMessagingService.kt`
+- **Description:** Push notifications stop working after reinstalling the app on the same device.
+- **Root cause:** FCM generates a new device token on reinstall, but the old token remains stored in the database.
+- **Fix applied:** Implemented `onNewToken()` callback in `PTODAFirebaseMessagingService.kt` to automatically `PUT /user/fcm-token` to the API whenever a new token is issued.
+- **Prevention tip:** Always implement `onNewToken` and sync the token to your backend immediately.
+
+---
+
+### [BUG-007] MySQL PDO connection fails silently
+
+- **Date:** _(fill in when encountered)_
+- **Phase:** Phase 3 — PHP REST API (Core Setup)
+- **File(s) affected:** `config/database.php`
+- **Description:** API returns empty responses or crashes with no useful message; MySQL is running.
+- **Root cause:** PDO connection was missing `PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION`, so errors were suppressed.
+- **Fix applied:** Added error mode to PDO options array:
+  ```php
+  $options = [
+      PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+      PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+  ];
+  ```
+- **Prevention tip:** Always enable `ERRMODE_EXCEPTION` on PDO connections during development so errors surface immediately.
+
+---
+
+### [BUG-008] CORS error — Android WebView or future web client blocked
+
+- **Date:** _(fill in when encountered)_
+- **Phase:** Phase 3 — PHP REST API
+- **File(s) affected:** `index.php`
+- **Description:** Cross-Origin requests blocked by browser/client with `Access-Control-Allow-Origin` error.
+- **Root cause:** No CORS headers set in the PHP API.
+- **Fix applied:** Added CORS headers at the top of `index.php`:
+  ```php
+  header("Access-Control-Allow-Origin: *");
+  header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+  header("Access-Control-Allow-Headers: Content-Type, Authorization");
+  if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') { http_response_code(200); exit(); }
+  ```
+- **Prevention tip:** Add CORS headers early in development. Restrict `Allow-Origin` to specific domains before going to production.
+
+---
+
+### [BUG-009] Booking status not updating in real-time on passenger screen
+
+- **Date:** _(fill in when encountered)_
+- **Phase:** Phase 4 — Passenger Screens
+- **File(s) affected:** `ui/passenger/RideStatusActivity.kt`
+- **Description:** Passenger sees stale booking status; it doesn't update when driver accepts the ride.
+- **Root cause:** The app only fetches status once on screen load with no polling or push mechanism implemented yet.
+- **Fix applied:** Implemented a short-interval polling mechanism (every 5 seconds via `Handler.postDelayed`) in `RideStatusActivity.kt` that calls `GET /bookings/{id}` until status is `completed` or `cancelled`.
+- **Prevention tip:** For MVP, polling is acceptable. Plan to replace with WebSocket or FCM data messages in a later phase.
+
+---
+
+### [BUG-010] Driver approval not checked on login
+
+- **Date:** _(fill in when encountered)_
+- **Phase:** Phase 3 — PHP REST API (Auth)
+- **File(s) affected:** `controllers/AuthController.php`
+- **Description:** A newly registered driver can log in and accept rides before an admin approves their account.
+- **Root cause:** `AuthController` login logic did not check `driver_info.approval_status` for driver-role users.
+- **Fix applied:** Added a check in `AuthController@login`: if `role === 'driver'` and `approval_status !== 'approved'`, return `403` with message `"Your driver account is pending admin approval."`.
+- **Prevention tip:** Always enforce role-specific business rules during authentication, not just at the feature endpoint level.
+
+---
+
+_Last updated: 2026-03-17_
+_Add new entries above this line as issues are discovered._
