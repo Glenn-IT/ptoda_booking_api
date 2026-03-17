@@ -34,28 +34,28 @@ Authorization: Bearer <jwt_token>
 
 ## Endpoints Summary
 
-| Method | Endpoint                      | Auth | Role   | Description                        |
-| ------ | ----------------------------- | ---- | ------ | ---------------------------------- |
-| POST   | /auth/register                | No   | —      | Register new user (passenger/driver) |
-| POST   | /auth/login                   | No   | —      | Login, returns JWT token           |
-| GET    | /bookings                     | Yes  | Any    | List bookings (role-filtered)      |
-| GET    | /bookings/{id}                | Yes  | Any    | Get booking by ID                  |
-| POST   | /bookings                     | Yes  | Passenger | Create new booking              |
-| GET    | /passenger/history            | Yes  | Passenger | Passenger ride history          |
-| GET    | /driver/requests              | Yes  | Driver | Pending ride requests              |
-| POST   | /driver/accept/{booking_id}   | Yes  | Driver | Accept a ride                      |
-| POST   | /driver/reject/{booking_id}   | Yes  | Driver | Reject a ride                      |
-| POST   | /driver/complete/{booking_id} | Yes  | Driver | Complete a ride                    |
-| PUT    | /driver/location              | Yes  | Driver | Update driver GPS location         |
-| PUT    | /user/fcm-token               | Yes  | Any    | Update FCM push token              |
-| GET    | /admin/users                  | Yes  | Admin  | List all users                     |
-| GET    | /admin/drivers/pending        | Yes  | Admin  | List drivers pending approval      |
-| GET    | /admin/bookings               | Yes  | Admin  | List all bookings                  |
-| PUT    | /admin/driver/approve/{id}    | Yes  | Admin  | Approve driver account             |
-| PUT    | /admin/driver/reject/{id}     | Yes  | Admin  | Reject driver account              |
-| PUT    | /admin/user/activate/{id}     | Yes  | Admin  | Activate (re-enable) a user        |
-| PUT    | /admin/user/deactivate/{id}   | Yes  | Admin  | Deactivate a user                  |
-| DELETE | /admin/user/{id}              | Yes  | Admin  | Permanently delete a user          |
+| Method | Endpoint                      | Auth | Role      | Description                          |
+| ------ | ----------------------------- | ---- | --------- | ------------------------------------ |
+| POST   | /auth/register                | No   | —         | Register new user (passenger/driver) |
+| POST   | /auth/login                   | No   | —         | Login, returns JWT token             |
+| GET    | /bookings                     | Yes  | Any       | List bookings (role-filtered)        |
+| GET    | /bookings/{id}                | Yes  | Any       | Get booking by ID                    |
+| POST   | /bookings                     | Yes  | Passenger | Create new booking                   |
+| GET    | /passenger/history            | Yes  | Passenger | Passenger ride history               |
+| GET    | /driver/requests              | Yes  | Driver    | Pending ride requests                |
+| POST   | /driver/accept/{booking_id}   | Yes  | Driver    | Accept a ride                        |
+| POST   | /driver/reject/{booking_id}   | Yes  | Driver    | Reject a ride                        |
+| POST   | /driver/complete/{booking_id} | Yes  | Driver    | Complete a ride                      |
+| PUT    | /driver/location              | Yes  | Driver    | Update driver GPS location           |
+| PUT    | /user/fcm-token               | Yes  | Any       | Update FCM push token                |
+| GET    | /admin/users                  | Yes  | Admin     | List all users                       |
+| GET    | /admin/drivers/pending        | Yes  | Admin     | List drivers pending approval        |
+| GET    | /admin/bookings               | Yes  | Admin     | List all bookings                    |
+| PUT    | /admin/driver/approve/{id}    | Yes  | Admin     | Approve driver account               |
+| PUT    | /admin/driver/reject/{id}     | Yes  | Admin     | Reject driver account                |
+| PUT    | /admin/user/activate/{id}     | Yes  | Admin     | Activate (re-enable) a user          |
+| PUT    | /admin/user/deactivate/{id}   | Yes  | Admin     | Deactivate a user                    |
+| DELETE | /admin/user/{id}              | Yes  | Admin     | Permanently delete a user            |
 
 ## Project Docs
 
