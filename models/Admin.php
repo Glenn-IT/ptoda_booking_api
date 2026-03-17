@@ -26,11 +26,36 @@ class Admin {
     }
 
     /**
+     * Get drivers with approval_status = 'pending'.
+     */
+    public function getPendingDrivers(): array {
+        return $this->db->query(
+            "SELECT u.id, u.name, u.email, u.created_at,
+                    di.license_no, di.vehicle_no, di.approval_status
+             FROM users u
+             INNER JOIN driver_info di ON di.user_id = u.id
+             WHERE u.role = 'driver' AND di.approval_status = 'pending'
+             ORDER BY u.created_at ASC"
+        )->fetchAll();
+    }
+
+    /**
      * Approve a driver account.
      */
     public function approveDriver(int $driverId): bool {
         $stmt = $this->db->prepare(
             "UPDATE driver_info SET approval_status = 'approved' WHERE user_id = :id"
+        );
+        $stmt->execute([':id' => $driverId]);
+        return $stmt->rowCount() > 0;
+    }
+
+    /**
+     * Reject a driver account.
+     */
+    public function rejectDriver(int $driverId): bool {
+        $stmt = $this->db->prepare(
+            "UPDATE driver_info SET approval_status = 'rejected' WHERE user_id = :id"
         );
         $stmt->execute([':id' => $driverId]);
         return $stmt->rowCount() > 0;

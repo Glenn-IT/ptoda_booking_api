@@ -25,14 +25,14 @@ ptoda_booking_api/
 ├── models/
 │   ├── User.php                  # User model (passenger & driver)
 │   ├── Booking.php               # Booking model
-│   └── Admin.php                 # Admin model
+│   └── Admin.php                 # Admin model (getAllDrivers, getPendingDrivers, approveDriver, rejectDriver, deactivateUser)
 │
 ├── controllers/
 │   ├── AuthController.php        # Register, Login, Logout
 │   ├── PassengerController.php   # Passenger-specific actions
 │   ├── DriverController.php      # Driver-specific actions
 │   ├── BookingController.php     # Booking CRUD & status management
-│   └── AdminController.php       # Admin panel actions
+│   └── AdminController.php       # Admin panel actions (includes driver pending list, approve, reject)
 │
 ├── routes/
 │   └── api.php                   # Route definitions (maps URI → controller)

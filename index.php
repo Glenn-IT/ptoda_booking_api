@@ -112,11 +112,17 @@ if ($uri === '/auth/register' && $method === 'POST') {
 } elseif ($uri === '/admin/users' && $method === 'GET') {
     (new AdminController())->getAllUsers();
 
+} elseif ($uri === '/admin/drivers/pending' && $method === 'GET') {
+    (new AdminController())->getPendingDrivers();
+
 } elseif ($uri === '/admin/bookings' && $method === 'GET') {
     (new AdminController())->getAllBookings();
 
 } elseif (preg_match('#^/admin/driver/approve/(\d+)$#', $uri, $m) && $method === 'PUT') {
     (new AdminController())->approveDriver((int) $m[1]);
+
+} elseif (preg_match('#^/admin/driver/reject/(\d+)$#', $uri, $m) && $method === 'PUT') {
+    (new AdminController())->rejectDriver((int) $m[1]);
 
 } elseif (preg_match('#^/admin/user/deactivate/(\d+)$#', $uri, $m) && $method === 'PUT') {
     (new AdminController())->deactivateUser((int) $m[1]);

@@ -30,6 +30,15 @@ class AdminController {
     }
 
     /**
+     * GET /admin/drivers/pending
+     */
+    public function getPendingDrivers(): void {
+        AuthMiddleware::handle([ROLE_ADMIN]);
+        $drivers = $this->adminModel->getPendingDrivers();
+        Response::success($drivers);
+    }
+
+    /**
      * GET /admin/bookings
      */
     public function getAllBookings(): void {
@@ -46,10 +55,24 @@ class AdminController {
         $success = $this->adminModel->approveDriver($driverId);
 
         if (!$success) {
-            Response::notFound('Driver not found.');
+            Response::notFound('Driver not found or already approved.');
         }
 
         Response::success(null, 'Driver approved successfully.');
+    }
+
+    /**
+     * PUT /admin/driver/reject/{id}
+     */
+    public function rejectDriver(int $driverId): void {
+        AuthMiddleware::handle([ROLE_ADMIN]);
+        $success = $this->adminModel->rejectDriver($driverId);
+
+        if (!$success) {
+            Response::notFound('Driver not found or already rejected.');
+        }
+
+        Response::success(null, 'Driver rejected successfully.');
     }
 
     /**

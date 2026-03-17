@@ -161,5 +161,23 @@
 
 ---
 
+### [BUG-011] Admin approval flow incomplete — no pending list or reject endpoint
+
+- **Date:** 2026-03-17
+- **Phase:** Phase 3 — PHP REST API (Admin)
+- **File(s) affected:** `controllers/AdminController.php`, `models/Admin.php`, `index.php`
+- **Description:** Admin had no way to see which drivers are waiting for approval, and there was no endpoint to reject a driver — only `PUT /admin/driver/approve/{id}` existed.
+- **Root cause:** During initial API build, the approval workflow was only partially implemented. The `approve` action was added but the `GET /admin/drivers/pending` listing endpoint and `PUT /admin/driver/reject/{id}` action were overlooked.
+- **Fix applied:**
+  1. Added `getPendingDrivers()` to `Admin.php` — queries `driver_info` for `approval_status = 'pending'`.
+  2. Added `rejectDriver()` to `Admin.php` — sets `approval_status = 'rejected'`.
+  3. Added `getPendingDrivers()` and `rejectDriver()` methods to `AdminController.php`.
+  4. Registered two new routes in `index.php`:
+     - `GET /admin/drivers/pending` → `AdminController::getPendingDrivers()`
+     - `PUT /admin/driver/reject/{id}` → `AdminController::rejectDriver()`
+- **Prevention tip:** When designing an approval workflow, always plan all three actions together: **list** (who needs action), **approve**, and **reject**. Check the full workflow end-to-end before marking a feature complete.
+
+---
+
 _Last updated: 2026-03-17_
 _Add new entries above this line as issues are discovered._

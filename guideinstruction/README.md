@@ -48,7 +48,9 @@ Authorization: Bearer <jwt_token>
 | PUT    | /driver/location              | Yes  | Update driver GPS location |
 | PUT    | /user/fcm-token               | Yes  | Update FCM push token      |
 | GET    | /admin/users                  | Yes  | Admin — list all users     |
+| GET    | /admin/drivers/pending        | Yes  | Admin — list pending drivers |
 | PUT    | /admin/driver/approve/{id}    | Yes  | Admin — approve driver     |
+| PUT    | /admin/driver/reject/{id}     | Yes  | Admin — reject driver      |
 | PUT    | /admin/user/deactivate/{id}   | Yes  | Admin — deactivate user    |
 | GET    | /admin/bookings               | Yes  | Admin — all bookings       |
 

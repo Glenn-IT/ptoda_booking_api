@@ -55,7 +55,7 @@
 
 - [x] **3.4.1** Create `models/User.php` — register, findByEmail, updateFCMToken
 - [x] **3.4.2** Create `models/Booking.php` — create, getById, updateStatus, getByDriver, getByPassenger
-- [x] **3.4.3** Create `models/Admin.php` — getAllUsers, approveDriver, deactivateUser
+- [x] **3.4.3** Create `models/Admin.php` — getAllDrivers, getPendingDrivers, approveDriver, rejectDriver, deactivateUser
 
 ### 3.5 Controllers
 
@@ -74,7 +74,9 @@
   - [x] `PUT /driver/location` — update driver's current GPS location
 - [x] **3.5.4** Create `controllers/AdminController.php`
   - [x] `GET /admin/users` — list all users
+  - [x] `GET /admin/drivers/pending` — list all drivers with `approval_status = 'pending'`
   - [x] `PUT /admin/driver/approve/{id}` — approve driver account
+  - [x] `PUT /admin/driver/reject/{id}` — reject driver account
   - [x] `PUT /admin/user/deactivate/{id}` — deactivate any user
   - [x] `GET /admin/bookings` — view all bookings
 - [x] **3.5.5** Create `controllers/BookingController.php`
@@ -301,6 +303,67 @@ Authorization: Bearer [P] or [D]
 - [x] **3.6.3** Test `POST /auth/login` — verify JWT returned
 - [x] **3.6.4** Test protected routes with Bearer token
 - [x] **3.6.5** Test full booking flow: create → accept → complete
+- [x] **3.6.6** Test Admin Driver Approval flow
+
+#### 3.6.6 Test Admin Driver Approval flow ✓
+
+**Pre-req**: Admin JWT token (login with seeded admin account). Newly registered driver with `approval_status = 'pending'`.
+
+**1. List pending drivers**:
+
+```
+GET http://localhost/ptoda_booking_api/admin/drivers/pending
+Authorization: Bearer [ADMIN_TOKEN]
+```
+
+**Expected** (200):
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": 6,
+      "name": "Test Driver",
+      "email": "driver@test.com",
+      "created_at": "2026-03-17 10:00:00",
+      "license_no": "DL123456",
+      "vehicle_no": "ABC123",
+      "approval_status": "pending"
+    }
+  ]
+}
+```
+
+**2a. Approve the driver** (use the driver's `id` from above):
+
+```
+PUT http://localhost/ptoda_booking_api/admin/driver/approve/6
+Authorization: Bearer [ADMIN_TOKEN]
+```
+
+**Expected** (200): `"Driver approved successfully."`
+
+**2b. OR — Reject the driver**:
+
+```
+PUT http://localhost/ptoda_booking_api/admin/driver/reject/6
+Authorization: Bearer [ADMIN_TOKEN]
+```
+
+**Expected** (200): `"Driver rejected successfully."`
+
+**3. Verify login is blocked until approved**:
+
+- Try `POST /auth/login` with driver credentials **before** approval.
+- **Expected** (403): `"Your driver account is pending admin approval."`
+- After approval, login succeeds and returns a JWT.
+
+**Edge Cases**:
+
+- Non-existent driver ID → 404 `Driver not found or already approved/rejected`
+- Non-admin token → 403 `You do not have permission`
+- Passenger token → 403 `You do not have permission`
 
 ---
 
