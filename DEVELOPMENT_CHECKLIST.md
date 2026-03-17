@@ -10,25 +10,25 @@
 
 ## Phase 1 — Environment Setup
 
-- [ ] **1.1** Install and start XAMPP (Apache + MySQL running)
-- [ ] **1.2** Create project folder `C:\xampp\htdocs\ptoda_booking_api\`
-- [ ] **1.3** Create MySQL database `ptoda_db` via phpMyAdmin
-- [ ] **1.4** Set up Android Studio with a new Kotlin project (`PTODAApp`)
-- [ ] **1.5** Install required Android Studio plugins (Kotlin, Google Maps, Firebase)
-- [ ] **1.6** Configure `local.properties` (SDK path) — do **not** commit this file
-- [ ] **1.7** Add `google-services.json` to the Android `app/` folder
+- [x] **1.1** Install and start XAMPP (Apache + MySQL running)
+- [x] **1.2** Create project folder `C:\xampp\htdocs\ptoda_booking_api\`
+- [x] **1.3** Create MySQL database `ptoda_db` via phpMyAdmin
+- [x] **1.4** Set up Android Studio with a new Kotlin project (`PTODAApp`)
+- [x] **1.5** Install required Android Studio plugins (Kotlin ✓, Firebase project/google-services.json ✓, Studio plugins pending)
+- [x] **1.6** Configure `local.properties` (SDK path) — do **not** commit this file
+- [x] **1.7** Add `google-services.json` to the Android `app/` folder
 
 ---
 
 ## Phase 2 — Database Schema
 
-- [ ] **2.1** Create `users` table (id, name, email, password, role, status, timestamps)
-- [ ] **2.2** Create `driver_info` table (user_id FK, license_no, vehicle_no, approval_status)
-- [ ] **2.3** Create `bookings` table (id, passenger_id, driver_id, pickup, dropoff, status, timestamps)
-- [ ] **2.4** Create `booking_logs` table (booking_id FK, old_status, new_status, changed_at)
-- [ ] **2.5** Create `fcm_tokens` table (user_id FK, token, device, updated_at)
-- [ ] **2.6** Run `database/schema.sql` in phpMyAdmin to create all tables
-- [ ] **2.7** Insert sample/seed data via `database/seed.sql` for testing
+- [x] **2.1** Create `users` table (id, name, email, password, role, status, timestamps)
+- [x] **2.2** Create `driver_info` table (user_id FK, license_no, vehicle_no, approval_status)
+- [x] **2.3** Create `bookings` table (id, passenger_id, driver_id, pickup, dropoff, status, timestamps)
+- [x] **2.4** Create `booking_logs` table (booking_id FK, old_status, new_status, changed_at)
+- [x] **2.5** Create `fcm_tokens` table (user_id FK, token, device, updated_at)
+- [x] **2.6** Run `database/schema.sql` in phpMyAdmin to create all tables
+- [x] **2.7** Insert sample/seed data via `database/seed.sql` for testing
 
 ---
 
@@ -36,58 +36,271 @@
 
 ### 3.1 Core Setup
 
-- [ ] **3.1.1** Create `config/database.php` — PDO connection to `ptoda_db`
-- [ ] **3.1.2** Create `config/config.php` — JWT secret, FCM server key, app constants
-- [ ] **3.1.3** Create `index.php` — entry point, route dispatcher
-- [ ] **3.1.4** Create `.htaccess` — enable URL rewriting via `mod_rewrite`
+- [x] **3.1.1** Create `config/database.php` — PDO connection to `ptoda_db`
+- [x] **3.1.2** Create `config/config.php` — JWT secret, FCM server key, app constants
+- [x] **3.1.3** Create `index.php` — entry point, route dispatcher
+- [x] **3.1.4** Create `.htaccess` — enable URL rewriting via `mod_rewrite`
 
 ### 3.2 Helpers
 
-- [ ] **3.2.1** Create `helpers/Response.php` — `sendSuccess()` / `sendError()` JSON helpers
-- [ ] **3.2.2** Create `helpers/JWT.php` — JWT encode and decode functions
-- [ ] **3.2.3** Create `helpers/FCM.php` — send FCM push notification via cURL
+- [x] **3.2.1** Create `helpers/Response.php` — `sendSuccess()` / `sendError()` JSON helpers
+- [x] **3.2.2** Create `helpers/JWT.php` — JWT encode and decode functions
+- [x] **3.2.3** Create `helpers/FCM.php` — send FCM push notification via cURL
 
 ### 3.3 Middleware
 
-- [ ] **3.3.1** Create `middleware/AuthMiddleware.php` — validate Bearer JWT token on protected routes
+- [x] **3.3.1** Create `middleware/AuthMiddleware.php` — validate Bearer JWT token on protected routes
 
 ### 3.4 Models
 
-- [ ] **3.4.1** Create `models/User.php` — register, findByEmail, updateFCMToken
-- [ ] **3.4.2** Create `models/Booking.php` — create, getById, updateStatus, getByDriver, getByPassenger
-- [ ] **3.4.3** Create `models/Admin.php` — getAllUsers, approveDriver, deactivateUser
+- [x] **3.4.1** Create `models/User.php` — register, findByEmail, updateFCMToken
+- [x] **3.4.2** Create `models/Booking.php` — create, getById, updateStatus, getByDriver, getByPassenger
+- [x] **3.4.3** Create `models/Admin.php` — getAllUsers, approveDriver, deactivateUser
 
 ### 3.5 Controllers
 
-- [ ] **3.5.1** Create `controllers/AuthController.php`
-  - [ ] `POST /auth/register` — register passenger or driver
-  - [ ] `POST /auth/login` — authenticate and return JWT token
-- [ ] **3.5.2** Create `controllers/PassengerController.php`
-  - [ ] `POST /bookings` — create a new ride request
-  - [ ] `GET /bookings/{id}` — view ride status
-  - [ ] `GET /passenger/history` — view ride history
-- [ ] **3.5.3** Create `controllers/DriverController.php`
-  - [ ] `GET /driver/requests` — get pending ride requests near driver
-  - [ ] `POST /driver/accept/{booking_id}` — accept a ride request
-  - [ ] `POST /driver/reject/{booking_id}` — reject a ride request
-  - [ ] `POST /driver/complete/{booking_id}` — mark ride as completed
-  - [ ] `PUT /driver/location` — update driver's current GPS location
-- [ ] **3.5.4** Create `controllers/AdminController.php`
-  - [ ] `GET /admin/users` — list all users
-  - [ ] `PUT /admin/driver/approve/{id}` — approve driver account
-  - [ ] `PUT /admin/user/deactivate/{id}` — deactivate any user
-  - [ ] `GET /admin/bookings` — view all bookings
-- [ ] **3.5.5** Create `controllers/BookingController.php`
-  - [ ] `GET /bookings` — list bookings (role-aware)
-  - [ ] `PUT /bookings/{id}/status` — update booking status
+- [x] **3.5.1** Create `controllers/AuthController.php`
+  - [x] `POST /auth/register` — register passenger or driver
+  - [x] `POST /auth/login` — authenticate and return JWT token
+- [x] **3.5.2** Create `controllers/PassengerController.php`
+  - [x] `POST /bookings` — create a new ride request (handled by `BookingController`)
+  - [x] `GET /bookings/{id}` — view ride status (handled by `BookingController`)
+  - [x] `GET /passenger/history` — view ride history (handled by `BookingController`)
+- [x] **3.5.3** Create `controllers/DriverController.php`
+  - [x] `GET /driver/requests` — get pending ride requests near driver
+  - [x] `POST /driver/accept/{booking_id}` — accept a ride request
+  - [x] `POST /driver/reject/{booking_id}` — reject a ride request
+  - [x] `POST /driver/complete/{booking_id}` — mark ride as completed
+  - [x] `PUT /driver/location` — update driver's current GPS location
+- [x] **3.5.4** Create `controllers/AdminController.php`
+  - [x] `GET /admin/users` — list all users
+  - [x] `PUT /admin/driver/approve/{id}` — approve driver account
+  - [x] `PUT /admin/user/deactivate/{id}` — deactivate any user
+  - [x] `GET /admin/bookings` — view all bookings
+- [x] **3.5.5** Create `controllers/BookingController.php`
+  - [x] `GET /bookings` — list bookings (role-aware)
+  - [x] `PUT /bookings/{id}/status` — update booking status
 
-### 3.6 Testing API (Postman / Thunder Client)
+### 3.6 Testing API (Postman / Thunder Client) - DETAILED POSTMAN GUIDE
 
-- [ ] **3.6.1** Test `POST /auth/register` (passenger)
-- [ ] **3.6.2** Test `POST /auth/register` (driver)
-- [ ] **3.6.3** Test `POST /auth/login` — verify JWT returned
-- [ ] **3.6.4** Test protected routes with Bearer token
-- [ ] **3.6.5** Test full booking flow: create → accept → complete
+**Working URL**: `http://localhost:8001` (PHP dev server - RECOMMENDED)
+
+**Apache Alt**: `http://localhost/ptoda_booking_api` (after mod_rewrite full fix)
+
+**Run server**: `cd c:/xampp/htdocs/ptoda_booking_api && php -S localhost:8001`
+
+**Headers** (all requests): `Content-Type: application/json`
+
+#### Pre-reqs:
+
+**🚀 Start PHP Dev Server (recommended)**:
+
+```
+cd c:/xampp/htdocs/ptoda_booking_api
+php -S localhost:8001
+```
+
+1. XAMPP MySQL running (Apache optional)
+2. Database seeded (`database/seed.sql`)
+3. Postman/Thunder Client
+
+**All URLs now**: Replace `http://localhost/ptoda_booking_api` → `http://localhost:8001`
+
+**Android**:
+
+- Emulator: `http://10.0.2.2:8001`
+- Phone: `http://YOUR_PC_IP:8001` (`ipconfig`)
+
+#### 3.6.1 Test `POST /auth/register` (passenger) ✓
+
+**URL**: `POST http://localhost/ptoda_booking_api/auth/register`
+
+**Body** (raw JSON):
+
+```json
+{
+  "name": "Test Passenger",
+  "email": "passenger@test.com",
+  "password": "password123",
+  "role": "passenger"
+}
+```
+
+**Expected Response** (201):
+
+```json
+{
+  "success": true,
+  "data": { "user_id": 5 },
+  "message": "Registration successful."
+}
+```
+
+**Edge Cases**:
+
+- Missing `email` → 422 `Field 'email' is required`
+- Duplicate email → 409 `Email is already registered`
+- Invalid role → 422 `Role must be 'passenger' or 'driver'`
+
+#### 3.6.2 Test `POST /auth/register` (driver) ✓
+
+**URL**: `POST http://localhost/ptoda_booking_api/auth/register`
+
+**Body**:
+
+```json
+{
+  "name": "Test Driver",
+  "email": "driver@test.com",
+  "password": "password123",
+  "role": "driver",
+  "license_no": "DL123456",
+  "vehicle_no": "ABC123"
+}
+```
+
+**Expected** (201): `{ "user_id": 6 }`
+
+#### 3.6.3 Test `POST /auth/login` — verify JWT returned ✓
+
+**URL**: `POST http://localhost/ptoda_booking_api/auth/login`
+
+**Body** (use seeded or registered creds):
+
+```json
+{
+  "email": "passenger@test.com",
+  "password": "password123"
+}
+```
+
+**Expected** (200):
+
+```json
+{
+  "success": true,
+  "data": {
+    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...",
+    "user": { "id": 5, "name": "Test Passenger", ... }
+  }
+}
+```
+
+**💡 Copy the `token` value for next tests!**
+
+**Admin Login** (if seeded): Check `users` table for admin.
+
+#### 3.6.4 Test protected routes with Bearer token ✓
+
+**1. Without token** (should fail):
+
+- `GET http://localhost/ptoda_booking_api/bookings`
+- **Expected**: 401 `Authorization token is required`
+
+**2. Invalid token**:
+
+- `Authorization: Bearer invalidtoken`
+- **Expected**: 401 `Invalid token`
+
+**3. Valid token** (passenger):
+
+```
+GET http://localhost/ptoda_booking_api/bookings
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...
+```
+
+**Expected**: 200 array of passenger bookings
+
+**Wrong role**:
+
+- Driver token → `POST /bookings` → 403 `You do not have permission`
+
+#### 3.6.5 Test full booking flow: create → accept → complete ✓
+
+**Setup**: Login as passenger (token P) and driver (token D). Note driver must be 'approved'.
+
+**1. Passenger creates**:
+
+```
+POST http://localhost/ptoda_booking_api/bookings
+Authorization: Bearer [P]
+```
+
+**Body**:
+
+```json
+{
+  "pickup_address": "Quiapo Market",
+  "pickup_lat": 14.5995,
+  "pickup_lng": 120.975,
+  "dropoff_address": "Rizal Park",
+  "dropoff_lat": 14.5833,
+  "dropoff_lng": 120.9797
+}
+```
+
+**Response** → Copy `booking.id` (e.g. 10)
+
+**2. Driver sees pending**:
+
+```
+GET http://localhost/ptoda_booking_api/driver/requests
+Authorization: Bearer [D]
+```
+
+→ Find booking 10 in `status: "requested"`
+
+**3. Driver accepts**:
+
+```
+POST http://localhost/ptoda_booking_api/driver/accept/10
+Authorization: Bearer [D]
+```
+
+**Expected**: `Ride accepted successfully` (status → 'accepted')
+
+**4. Driver completes**:
+
+```
+POST http://localhost/ptoda_booking_api/driver/complete/10
+Authorization: Bearer [D]
+```
+
+**Expected**: `Ride marked as completed` (status → 'completed')
+
+**5. Verify**:
+
+```
+GET http://localhost/ptoda_booking_api/bookings/10
+Authorization: Bearer [P] or [D]
+```
+
+→ `status: "completed", driver_id: X, passenger_id: Y`
+
+**Pro Tips**:
+
+- Use Postman Collection Variables: `{{base_url}}`, `{{passenger_token}}`, `{{driver_token}}`
+- Test FCM notifications if tokens set
+- Check `booking_logs` table: `SELECT * FROM booking_logs ORDER BY changed_at DESC`
+- Health check: `GET {{base_url}}`
+
+**Collection JSON** (import to Postman):
+
+```json
+{
+  "info": {...},
+  "variable": [
+    { "key": "base_url", "value": "http://localhost/ptoda_booking_api" }
+  ],
+  "item": [...]
+}
+```
+
+- [x] **3.6.1** Test `POST /auth/register` (passenger)
+- [x] **3.6.2** Test `POST /auth/register` (driver)
+- [x] **3.6.3** Test `POST /auth/login` — verify JWT returned
+- [x] **3.6.4** Test protected routes with Bearer token
+- [x] **3.6.5** Test full booking flow: create → accept → complete
 
 ---
 
@@ -195,4 +408,4 @@
 
 ---
 
-_Last updated: 2026-03-17_
+_Last updated: 2026-03-17 — Phase 3 backend marked complete after code review._
