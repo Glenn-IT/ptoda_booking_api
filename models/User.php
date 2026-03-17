@@ -87,8 +87,7 @@ class User {
         $stmt->execute([':status' => $status, ':id' => $userId]);
     }
 
-    /**
-     * Get all users (admin use).
+
      */
     public function getAll(): array {
         return $this->db->query("SELECT id, name, email, role, status, created_at FROM users ORDER BY created_at DESC")->fetchAll();

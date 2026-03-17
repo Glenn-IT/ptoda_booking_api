@@ -34,25 +34,25 @@ Authorization: Bearer <jwt_token>
 
 ## Endpoints Summary
 
-| Method | Endpoint                      | Auth | Description                |
-| ------ | ----------------------------- | ---- | -------------------------- |
-| POST   | /auth/register                | No   | Register new user          |
-| POST   | /auth/login                   | No   | Login, returns JWT token   |
-| GET    | /bookings/{id}                | Yes  | Get booking by ID          |
-| POST   | /bookings                     | Yes  | Create new booking         |
-| GET    | /passenger/history            | Yes  | Passenger ride history     |
-| GET    | /driver/requests              | Yes  | Driver — pending requests  |
-| POST   | /driver/accept/{booking_id}   | Yes  | Driver — accept ride       |
-| POST   | /driver/reject/{booking_id}   | Yes  | Driver — reject ride       |
-| POST   | /driver/complete/{booking_id} | Yes  | Driver — complete ride     |
-| PUT    | /driver/location              | Yes  | Update driver GPS location |
-| PUT    | /user/fcm-token               | Yes  | Update FCM push token      |
-| GET    | /admin/users                  | Yes  | Admin — list all users     |
+| Method | Endpoint                      | Auth | Description                  |
+| ------ | ----------------------------- | ---- | ---------------------------- |
+| POST   | /auth/register                | No   | Register new user            |
+| POST   | /auth/login                   | No   | Login, returns JWT token     |
+| GET    | /bookings/{id}                | Yes  | Get booking by ID            |
+| POST   | /bookings                     | Yes  | Create new booking           |
+| GET    | /passenger/history            | Yes  | Passenger ride history       |
+| GET    | /driver/requests              | Yes  | Driver — pending requests    |
+| POST   | /driver/accept/{booking_id}   | Yes  | Driver — accept ride         |
+| POST   | /driver/reject/{booking_id}   | Yes  | Driver — reject ride         |
+| POST   | /driver/complete/{booking_id} | Yes  | Driver — complete ride       |
+| PUT    | /driver/location              | Yes  | Update driver GPS location   |
+| PUT    | /user/fcm-token               | Yes  | Update FCM push token        |
+| GET    | /admin/users                  | Yes  | Admin — list all users       |
 | GET    | /admin/drivers/pending        | Yes  | Admin — list pending drivers |
-| PUT    | /admin/driver/approve/{id}    | Yes  | Admin — approve driver     |
-| PUT    | /admin/driver/reject/{id}     | Yes  | Admin — reject driver      |
-| PUT    | /admin/user/deactivate/{id}   | Yes  | Admin — deactivate user    |
-| GET    | /admin/bookings               | Yes  | Admin — all bookings       |
+| PUT    | /admin/driver/approve/{id}    | Yes  | Admin — approve driver       |
+| PUT    | /admin/driver/reject/{id}     | Yes  | Admin — reject driver        |
+| PUT    | /admin/user/deactivate/{id}   | Yes  | Admin — deactivate user      |
+| GET    | /admin/bookings               | Yes  | Admin — all bookings         |
 
 ## Project Docs
 
