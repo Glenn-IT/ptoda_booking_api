@@ -179,5 +179,29 @@
 
 ---
 
+### [BUG-012] No activate endpoint — deactivated users could never be re-enabled
+
+- **Date:** 2026-03-17
+- **Phase:** Phase 3 — PHP REST API (Admin)
+- **File(s) affected:** `controllers/AdminController.php`, `models/Admin.php`, `index.php`
+- **Description:** `PUT /admin/user/deactivate/{id}` existed but there was no counterpart to re-enable a user. Once deactivated, a user account was permanently locked with no recovery path via the API.
+- **Root cause:** Only half of the status-toggle workflow was implemented.
+- **Fix applied:** Added `activateUser()` to `Admin.php` and `activateUser()` action to `AdminController.php`. Registered route `PUT /admin/user/activate/{id}` in `index.php`. Also tightened `deactivateUser()` to only match `status = 'active'` rows so `rowCount() === 0` correctly returns 404 when user is already inactive.
+- **Prevention tip:** Whenever you add a "disable" action, always implement the "enable" counterpart at the same time.
+
+---
+
+### [BUG-013] No delete user endpoint — no way to permanently remove accounts
+
+- **Date:** 2026-03-17
+- **Phase:** Phase 3 — PHP REST API (Admin)
+- **File(s) affected:** `controllers/AdminController.php`, `models/Admin.php`, `index.php`
+- **Description:** There was no `DELETE /admin/user/{id}` endpoint, making it impossible to permanently remove test accounts or comply with data-removal requests.
+- **Root cause:** Delete (the D in CRUD) was never implemented for the user resource.
+- **Fix applied:** Added `deleteUser()` to `Admin.php` (issues `DELETE FROM users WHERE id = :id`). Added `deleteUser()` action to `AdminController.php` with a pre-flight `findById` check. Registered route `DELETE /admin/user/{id}` in `index.php`.
+- **Prevention tip:** Always review full CRUD coverage (Create, Read, Update, Delete) for every resource before marking a feature complete. Related records (driver_info, fcm_tokens) must be covered by `ON DELETE CASCADE` in the schema to avoid orphaned rows.
+
+---
+
 _Last updated: 2026-03-17_
 _Add new entries above this line as issues are discovered._

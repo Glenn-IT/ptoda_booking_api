@@ -55,7 +55,7 @@
 
 - [x] **3.4.1** Create `models/User.php` — register, findByEmail, updateFCMToken
 - [x] **3.4.2** Create `models/Booking.php` — create, getById, updateStatus, getByDriver, getByPassenger
-- [x] **3.4.3** Create `models/Admin.php` — getAllDrivers, getPendingDrivers, approveDriver, rejectDriver, deactivateUser
+- [x] **3.4.3** Create `models/Admin.php` — getAllDrivers, getPendingDrivers, approveDriver, rejectDriver, activateUser, deactivateUser, deleteUser
 
 ### 3.5 Controllers
 
@@ -77,7 +77,9 @@
   - [x] `GET /admin/drivers/pending` — list all drivers with `approval_status = 'pending'`
   - [x] `PUT /admin/driver/approve/{id}` — approve driver account
   - [x] `PUT /admin/driver/reject/{id}` — reject driver account
-  - [x] `PUT /admin/user/deactivate/{id}` — deactivate any user
+  - [x] `PUT /admin/user/activate/{id}` — re-activate a user account
+  - [x] `PUT /admin/user/deactivate/{id}` — deactivate a user account
+  - [x] `DELETE /admin/user/{id}` — permanently delete a user
   - [x] `GET /admin/bookings` — view all bookings
 - [x] **3.5.5** Create `controllers/BookingController.php`
   - [x] `GET /bookings` — list bookings (role-aware)
@@ -304,6 +306,8 @@ Authorization: Bearer [P] or [D]
 - [x] **3.6.4** Test protected routes with Bearer token
 - [x] **3.6.5** Test full booking flow: create → accept → complete
 - [x] **3.6.6** Test Admin Driver Approval flow
+- [x] **3.6.7** Test Admin User Activate / Deactivate
+- [x] **3.6.8** Test Admin Delete User
 
 #### 3.6.6 Test Admin Driver Approval flow ✓
 
@@ -364,6 +368,87 @@ Authorization: Bearer [ADMIN_TOKEN]
 - Non-existent driver ID → 404 `Driver not found or already approved/rejected`
 - Non-admin token → 403 `You do not have permission`
 - Passenger token → 403 `You do not have permission`
+
+---
+
+#### 3.6.7 Test Admin User Activate / Deactivate ✓
+
+**Pre-req**: Admin JWT token. A target user ID (passenger or driver).
+
+**1. Deactivate a user**:
+
+```
+PUT http://localhost/ptoda_booking_api/admin/user/deactivate/5
+Authorization: Bearer [ADMIN_TOKEN]
+```
+
+**Expected** (200): `"User deactivated successfully."`
+
+**Verify — login is blocked after deactivate**:
+
+```
+POST http://localhost/ptoda_booking_api/auth/login
+Body: { "email": "passenger@test.com", "password": "password123" }
+```
+
+**Expected** (403): `"Your account has been deactivated. Contact admin."`
+
+**2. Activate the same user**:
+
+```
+PUT http://localhost/ptoda_booking_api/admin/user/activate/5
+Authorization: Bearer [ADMIN_TOKEN]
+```
+
+**Expected** (200): `"User activated successfully."`
+
+**Verify — login works again** after activation.
+
+**Edge Cases**:
+
+- Deactivate already-inactive user → 404 `User not found or already inactive`
+- Activate already-active user → 404 `User not found or already active`
+- Non-admin token → 403 `You do not have permission`
+
+---
+
+#### 3.6.8 Test Admin Delete User ✓
+
+> ⚠️ **Destructive action** — permanently removes the user and all related records (driver_info, fcm_tokens). Use with caution; intended for test cleanup or GDPR-style removal.
+
+**Pre-req**: Admin JWT token. A target user ID to delete.
+
+**1. Delete a user**:
+
+```
+DELETE http://localhost/ptoda_booking_api/admin/user/6
+Authorization: Bearer [ADMIN_TOKEN]
+```
+
+**Expected** (200): `"User deleted successfully."`
+
+**2. Verify user is gone**:
+
+```
+GET http://localhost/ptoda_booking_api/admin/users
+Authorization: Bearer [ADMIN_TOKEN]
+```
+
+→ User with `id: 6` no longer appears in the list.
+
+**3. Verify login is gone**:
+
+```
+POST http://localhost/ptoda_booking_api/auth/login
+Body: { "email": "driver@test.com", "password": "password123" }
+```
+
+**Expected** (401): `"Invalid email or password."`
+
+**Edge Cases**:
+
+- Non-existent user ID → 404 `User not found`
+- Non-admin token → 403 `You do not have permission`
 
 ---
 

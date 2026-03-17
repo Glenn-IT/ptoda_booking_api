@@ -127,6 +127,12 @@ if ($uri === '/auth/register' && $method === 'POST') {
 } elseif (preg_match('#^/admin/user/deactivate/(\d+)$#', $uri, $m) && $method === 'PUT') {
     (new AdminController())->deactivateUser((int) $m[1]);
 
+} elseif (preg_match('#^/admin/user/activate/(\d+)$#', $uri, $m) && $method === 'PUT') {
+    (new AdminController())->activateUser((int) $m[1]);
+
+} elseif (preg_match('#^/admin/user/(\d+)$#', $uri, $m) && $method === 'DELETE') {
+    (new AdminController())->deleteUser((int) $m[1]);
+
 // Health check
 } elseif ($uri === '/' || $uri === '') {
     Response::success(['version' => APP_VERSION], APP_NAME . ' is running.');

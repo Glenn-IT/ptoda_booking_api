@@ -66,8 +66,29 @@ class Admin {
      */
     public function deactivateUser(int $userId): bool {
         $stmt = $this->db->prepare(
-            "UPDATE users SET status = 'inactive' WHERE id = :id"
+            "UPDATE users SET status = 'inactive' WHERE id = :id AND status = 'active'"
         );
+        $stmt->execute([':id' => $userId]);
+        return $stmt->rowCount() > 0;
+    }
+
+    /**
+     * Activate (re-enable) any user account (passenger or driver).
+     */
+    public function activateUser(int $userId): bool {
+        $stmt = $this->db->prepare(
+            "UPDATE users SET status = 'active' WHERE id = :id AND status = 'inactive'"
+        );
+        $stmt->execute([':id' => $userId]);
+        return $stmt->rowCount() > 0;
+    }
+
+    /**
+     * Permanently delete a user and their related records.
+     */
+    public function deleteUser(int $userId): bool {
+        // driver_info, fcm_tokens, bookings rows are cleaned up via ON DELETE CASCADE in schema
+        $stmt = $this->db->prepare("DELETE FROM users WHERE id = :id");
         $stmt->execute([':id' => $userId]);
         return $stmt->rowCount() > 0;
     }

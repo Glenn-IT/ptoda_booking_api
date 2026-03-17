@@ -83,9 +83,38 @@ class AdminController {
         $success = $this->adminModel->deactivateUser($userId);
 
         if (!$success) {
-            Response::notFound('User not found.');
+            Response::notFound('User not found or already inactive.');
         }
 
         Response::success(null, 'User deactivated successfully.');
+    }
+
+    /**
+     * PUT /admin/user/activate/{id}
+     */
+    public function activateUser(int $userId): void {
+        AuthMiddleware::handle([ROLE_ADMIN]);
+        $success = $this->adminModel->activateUser($userId);
+
+        if (!$success) {
+            Response::notFound('User not found or already active.');
+        }
+
+        Response::success(null, 'User activated successfully.');
+    }
+
+    /**
+     * DELETE /admin/user/{id}
+     */
+    public function deleteUser(int $userId): void {
+        AuthMiddleware::handle([ROLE_ADMIN]);
+        $user = $this->userModel->findById($userId);
+
+        if (!$user) {
+            Response::notFound('User not found.');
+        }
+
+        $this->adminModel->deleteUser($userId);
+        Response::success(null, 'User deleted successfully.');
     }
 }
