@@ -9,10 +9,10 @@
 
 Authentication is **stateless JWT-based**. No session is stored server-side.
 
-| Step | Action             | Endpoint            |
-| ---- | ------------------ | ------------------- |
-| 1    | Register account   | `POST /auth/register` |
-| 2    | Login, get token   | `POST /auth/login`    |
+| Step | Action                            | Endpoint                        |
+| ---- | --------------------------------- | ------------------------------- |
+| 1    | Register account                  | `POST /auth/register`           |
+| 2    | Login, get token                  | `POST /auth/login`              |
 | 3    | Use token on every protected call | `Authorization: Bearer <token>` |
 
 ---
@@ -75,13 +75,13 @@ Drivers additionally require `license_no` and `vehicle_no`.
 
 ### Error Responses
 
-| HTTP | Condition                         | Message                                  |
-| ---- | --------------------------------- | ---------------------------------------- |
-| 422  | Missing required field            | `"Field 'email' is required."`           |
-| 422  | Invalid role                      | `"Role must be 'passenger' or 'driver'."` |
+| HTTP | Condition                         | Message                                                 |
+| ---- | --------------------------------- | ------------------------------------------------------- |
+| 422  | Missing required field            | `"Field 'email' is required."`                          |
+| 422  | Invalid role                      | `"Role must be 'passenger' or 'driver'."`               |
 | 422  | Driver missing license or vehicle | `"license_no and vehicle_no are required for drivers."` |
-| 409  | Email already registered          | `"Email is already registered."`         |
-| 500  | DB error                          | `"Registration failed."`                 |
+| 409  | Email already registered          | `"Email is already registered."`                        |
+| 500  | DB error                          | `"Registration failed."`                                |
 
 ---
 
@@ -147,13 +147,13 @@ Token expiry: **7 days** (configurable in `config/config.php`).
 
 ### Error Responses
 
-| HTTP | Condition                                   | Message                                                    |
-| ---- | ------------------------------------------- | ---------------------------------------------------------- |
-| 422  | Missing email or password                   | `"Email and password are required."`                       |
-| 401  | Wrong credentials                           | `"Invalid email or password."`                             |
-| 403  | Account deactivated                         | `"Your account has been deactivated. Contact admin."`      |
-| 403  | Driver not yet approved                     | `"Your driver account is pending admin approval."`         |
-| 403  | Driver rejected                             | `"Your driver account has been rejected. Contact admin."`  |
+| HTTP | Condition                 | Message                                                   |
+| ---- | ------------------------- | --------------------------------------------------------- |
+| 422  | Missing email or password | `"Email and password are required."`                      |
+| 401  | Wrong credentials         | `"Invalid email or password."`                            |
+| 403  | Account deactivated       | `"Your account has been deactivated. Contact admin."`     |
+| 403  | Driver not yet approved   | `"Your driver account is pending admin approval."`        |
+| 403  | Driver rejected           | `"Your driver account has been rejected. Contact admin."` |
 
 ---
 
@@ -204,12 +204,12 @@ suspend fun login(@Body body: LoginRequest): ApiResponse<LoginResponse>
 
 ## Sync Rules
 
-| Backend Change                                       | Update Here                        |
-| ---------------------------------------------------- | ---------------------------------- |
-| New field added to register (e.g., `phone_number`)   | Request body + Kotlin `RegisterRequest` |
-| Login response adds new user fields                  | `LoginResponse` / `UserResponse`   |
-| Token expiry changed                                 | JWT Payload section                |
-| New error condition added                            | Error Responses table              |
+| Backend Change                                     | Update Here                             |
+| -------------------------------------------------- | --------------------------------------- |
+| New field added to register (e.g., `phone_number`) | Request body + Kotlin `RegisterRequest` |
+| Login response adds new user fields                | `LoginResponse` / `UserResponse`        |
+| Token expiry changed                               | JWT Payload section                     |
+| New error condition added                          | Error Responses table                   |
 
 ---
 

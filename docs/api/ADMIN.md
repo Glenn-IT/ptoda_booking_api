@@ -8,6 +8,7 @@
 ## Overview
 
 All admin endpoints require:
+
 1. A valid JWT token (`Authorization: Bearer <token>`)
 2. The token's role must be `admin`
 
@@ -125,9 +126,9 @@ The driver can now log in and accept rides.
 
 ### URL Parameter
 
-| Param | Type | Description         |
-| ----- | ---- | ------------------- |
-| `id`  | int  | User ID of driver   |
+| Param | Type | Description       |
+| ----- | ---- | ----------------- |
+| `id`  | int  | User ID of driver |
 
 ### Request Body
 
@@ -145,10 +146,10 @@ _None required._
 
 ### Error Responses
 
-| HTTP | Condition                               | Message                                             |
-| ---- | --------------------------------------- | --------------------------------------------------- |
-| 404  | Driver not found or already approved    | `"Driver not found or already approved/rejected."`  |
-| 403  | Role is not admin                       | `"You do not have permission."`                     |
+| HTTP | Condition                            | Message                                            |
+| ---- | ------------------------------------ | -------------------------------------------------- |
+| 404  | Driver not found or already approved | `"Driver not found or already approved/rejected."` |
+| 403  | Role is not admin                    | `"You do not have permission."`                    |
 
 ---
 
@@ -163,9 +164,9 @@ The driver will be blocked at login with a clear rejection message.
 
 ### URL Parameter
 
-| Param | Type | Description         |
-| ----- | ---- | ------------------- |
-| `id`  | int  | User ID of driver   |
+| Param | Type | Description       |
+| ----- | ---- | ----------------- |
+| `id`  | int  | User ID of driver |
 
 ### Request Body
 
@@ -183,10 +184,10 @@ _None required._
 
 ### Error Responses
 
-| HTTP | Condition                              | Message                                             |
-| ---- | -------------------------------------- | --------------------------------------------------- |
-| 404  | Driver not found or already rejected   | `"Driver not found or already approved/rejected."`  |
-| 403  | Role is not admin                      | `"You do not have permission."`                     |
+| HTTP | Condition                            | Message                                            |
+| ---- | ------------------------------------ | -------------------------------------------------- |
+| 404  | Driver not found or already rejected | `"Driver not found or already approved/rejected."` |
+| 403  | Role is not admin                    | `"You do not have permission."`                    |
 
 ---
 
@@ -201,9 +202,9 @@ The user can log in again after this.
 
 ### URL Parameter
 
-| Param | Type | Description  |
-| ----- | ---- | ------------ |
-| `id`  | int  | User ID      |
+| Param | Type | Description |
+| ----- | ---- | ----------- |
+| `id`  | int  | User ID     |
 
 ### Request Body
 
@@ -221,10 +222,10 @@ _None required._
 
 ### Error Responses
 
-| HTTP | Condition                            | Message                                    |
-| ---- | ------------------------------------ | ------------------------------------------ |
-| 404  | User not found or already active     | `"User not found or already active."`      |
-| 403  | Role is not admin                    | `"You do not have permission."`            |
+| HTTP | Condition                        | Message                               |
+| ---- | -------------------------------- | ------------------------------------- |
+| 404  | User not found or already active | `"User not found or already active."` |
+| 403  | Role is not admin                | `"You do not have permission."`       |
 
 ---
 
@@ -239,9 +240,9 @@ The user will be blocked at login until re-activated.
 
 ### URL Parameter
 
-| Param | Type | Description  |
-| ----- | ---- | ------------ |
-| `id`  | int  | User ID      |
+| Param | Type | Description |
+| ----- | ---- | ----------- |
+| `id`  | int  | User ID     |
 
 ### Request Body
 
@@ -259,10 +260,10 @@ _None required._
 
 ### Error Responses
 
-| HTTP | Condition                             | Message                                    |
-| ---- | ------------------------------------- | ------------------------------------------ |
-| 404  | User not found or already inactive    | `"User not found or already inactive."`    |
-| 403  | Role is not admin                     | `"You do not have permission."`            |
+| HTTP | Condition                          | Message                                 |
+| ---- | ---------------------------------- | --------------------------------------- |
+| 404  | User not found or already inactive | `"User not found or already inactive."` |
+| 403  | Role is not admin                  | `"You do not have permission."`         |
 
 ---
 
@@ -279,9 +280,9 @@ Bookings with this user as passenger are also cascade-deleted.
 
 ### URL Parameter
 
-| Param | Type | Description  |
-| ----- | ---- | ------------ |
-| `id`  | int  | User ID      |
+| Param | Type | Description |
+| ----- | ---- | ----------- |
+| `id`  | int  | User ID     |
 
 ### Request Body
 
@@ -299,10 +300,10 @@ _None required._
 
 ### Error Responses
 
-| HTTP | Condition          | Message                |
-| ---- | ------------------ | ---------------------- |
-| 404  | User not found     | `"User not found."`    |
-| 403  | Role is not admin  | `"You do not have permission."` |
+| HTTP | Condition         | Message                         |
+| ---- | ----------------- | ------------------------------- |
+| 404  | User not found    | `"User not found."`             |
+| 403  | Role is not admin | `"You do not have permission."` |
 
 ---
 
@@ -363,12 +364,12 @@ suspend fun deleteUser(@Path("id") userId: Int): ApiResponse<Unit>
 
 ## Sync Rules
 
-| Backend Change                                     | Update Here                              |
-| -------------------------------------------------- | ---------------------------------------- |
-| New admin endpoint added                           | New section + `INDEX.md` endpoint table  |
-| User response adds new fields (e.g., `phone`)      | `AdminUser` data class + response example|
-| `PendingDriver` response includes photo URL        | `PendingDriver` data class + example     |
-| Delete endpoint changed to soft-delete             | `DELETE` section description + note      |
+| Backend Change                                | Update Here                               |
+| --------------------------------------------- | ----------------------------------------- |
+| New admin endpoint added                      | New section + `INDEX.md` endpoint table   |
+| User response adds new fields (e.g., `phone`) | `AdminUser` data class + response example |
+| `PendingDriver` response includes photo URL   | `PendingDriver` data class + example      |
+| Delete endpoint changed to soft-delete        | `DELETE` section description + note       |
 
 ---
 

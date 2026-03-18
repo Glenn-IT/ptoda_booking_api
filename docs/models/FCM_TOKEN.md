@@ -23,12 +23,12 @@ CREATE TABLE fcm_tokens (
 
 ### Column Reference
 
-| Column       | Type                          | Notes                                         |
-| ------------ | ----------------------------- | --------------------------------------------- |
-| `id`         | INT UNSIGNED, PK              | Auto-assigned                                 |
-| `user_id`    | INT UNSIGNED, FK, UNIQUE      | 1:1 with `users.id` — cascade delete          |
-| `token`      | VARCHAR(255)                  | FCM device registration token                 |
-| `updated_at` | DATETIME                      | Auto-updated every time the token changes     |
+| Column       | Type                     | Notes                                     |
+| ------------ | ------------------------ | ----------------------------------------- |
+| `id`         | INT UNSIGNED, PK         | Auto-assigned                             |
+| `user_id`    | INT UNSIGNED, FK, UNIQUE | 1:1 with `users.id` — cascade delete      |
+| `token`      | VARCHAR(255)             | FCM device registration token             |
+| `updated_at` | DATETIME                 | Auto-updated every time the token changes |
 
 ### Key Behaviours
 
@@ -42,11 +42,11 @@ CREATE TABLE fcm_tokens (
 
 The backend reads tokens from this table when it needs to push a notification to a user:
 
-| Event                     | Who Gets Notified | Trigger                           |
-| ------------------------- | ----------------- | --------------------------------- |
-| Driver accepts a ride     | Passenger         | `POST /driver/accept/{id}`        |
-| Driver completes a ride   | Passenger         | `POST /driver/complete/{id}`      |
-| New booking created       | Driver (future)   | `POST /bookings` (when broadcast) |
+| Event                   | Who Gets Notified | Trigger                           |
+| ----------------------- | ----------------- | --------------------------------- |
+| Driver accepts a ride   | Passenger         | `POST /driver/accept/{id}`        |
+| Driver completes a ride | Passenger         | `POST /driver/complete/{id}`      |
+| New booking created     | Driver (future)   | `POST /bookings` (when broadcast) |
 
 Notification is sent via `helpers/FCM.php` using FCM HTTP v1 API.
 
@@ -54,9 +54,9 @@ Notification is sent via `helpers/FCM.php` using FCM HTTP v1 API.
 
 ## PHP Model Method (`models/User.php`)
 
-| Method                                           | Description                                   |
-| ------------------------------------------------ | --------------------------------------------- |
-| `updateFCMToken(int $userId, string $token): void` | INSERT ... ON DUPLICATE KEY UPDATE upsert   |
+| Method                                             | Description                               |
+| -------------------------------------------------- | ----------------------------------------- |
+| `updateFCMToken(int $userId, string $token): void` | INSERT ... ON DUPLICATE KEY UPDATE upsert |
 
 ---
 
@@ -94,11 +94,11 @@ App running + token refreshed by Firebase
 
 ## Sync Rules
 
-| Backend Change                                        | Update Here                            |
-| ----------------------------------------------------- | -------------------------------------- |
-| Table extended to support multiple devices per user   | MySQL table + Key Behaviours + UNIQUE note |
-| `token` column size increased                         | Column Reference VARCHAR size          |
-| New notification event added                          | "How the backend uses FCM tokens" table |
+| Backend Change                                      | Update Here                                |
+| --------------------------------------------------- | ------------------------------------------ |
+| Table extended to support multiple devices per user | MySQL table + Key Behaviours + UNIQUE note |
+| `token` column size increased                       | Column Reference VARCHAR size              |
+| New notification event added                        | "How the backend uses FCM tokens" table    |
 
 ---
 

@@ -35,13 +35,13 @@ docs/
 
 ## 🔌 API Base URL
 
-| Context                         | URL                                         |
-| ------------------------------- | ------------------------------------------- |
-| Localhost (browser / Postman)   | `http://localhost/ptoda_booking_api/`       |
-| PHP dev server (recommended)    | `http://localhost:8001/`                    |
-| Android Emulator → host PC      | `http://10.0.2.2/ptoda_booking_api/`        |
-| Android Emulator → PHP dev srv  | `http://10.0.2.2:8001/`                     |
-| Physical device (same Wi-Fi)    | `http://192.168.x.x/ptoda_booking_api/`     |
+| Context                        | URL                                     |
+| ------------------------------ | --------------------------------------- |
+| Localhost (browser / Postman)  | `http://localhost/ptoda_booking_api/`   |
+| PHP dev server (recommended)   | `http://localhost:8001/`                |
+| Android Emulator → host PC     | `http://10.0.2.2/ptoda_booking_api/`    |
+| Android Emulator → PHP dev srv | `http://10.0.2.2:8001/`                 |
+| Physical device (same Wi-Fi)   | `http://192.168.x.x/ptoda_booking_api/` |
 
 ---
 
@@ -60,40 +60,40 @@ Tokens are obtained from `POST /auth/login`. Roles encoded in the JWT payload:
 
 ## 📋 All Endpoints at a Glance
 
-| Method   | Endpoint                        | Auth | Role      | Doc File         |
-| -------- | ------------------------------- | ---- | --------- | ---------------- |
-| `POST`   | `/auth/register`                | ❌   | —         | `api/AUTH.md`    |
-| `POST`   | `/auth/login`                   | ❌   | —         | `api/AUTH.md`    |
-| `POST`   | `/bookings`                     | ✅   | Passenger | `api/BOOKINGS.md`|
-| `GET`    | `/bookings`                     | ✅   | Any       | `api/BOOKINGS.md`|
-| `GET`    | `/bookings/{id}`                | ✅   | Any       | `api/BOOKINGS.md`|
-| `GET`    | `/passenger/history`            | ✅   | Passenger | `api/BOOKINGS.md`|
-| `GET`    | `/driver/requests`              | ✅   | Driver    | `api/DRIVER.md`  |
-| `POST`   | `/driver/accept/{booking_id}`   | ✅   | Driver    | `api/DRIVER.md`  |
-| `POST`   | `/driver/reject/{booking_id}`   | ✅   | Driver    | `api/DRIVER.md`  |
-| `POST`   | `/driver/complete/{booking_id}` | ✅   | Driver    | `api/DRIVER.md`  |
-| `PUT`    | `/driver/location`              | ✅   | Driver    | `api/DRIVER.md`  |
-| `PUT`    | `/user/fcm-token`               | ✅   | Any       | `api/FCM.md`     |
-| `GET`    | `/admin/users`                  | ✅   | Admin     | `api/ADMIN.md`   |
-| `GET`    | `/admin/drivers/pending`        | ✅   | Admin     | `api/ADMIN.md`   |
-| `GET`    | `/admin/bookings`               | ✅   | Admin     | `api/ADMIN.md`   |
-| `PUT`    | `/admin/driver/approve/{id}`    | ✅   | Admin     | `api/ADMIN.md`   |
-| `PUT`    | `/admin/driver/reject/{id}`     | ✅   | Admin     | `api/ADMIN.md`   |
-| `PUT`    | `/admin/user/activate/{id}`     | ✅   | Admin     | `api/ADMIN.md`   |
-| `PUT`    | `/admin/user/deactivate/{id}`   | ✅   | Admin     | `api/ADMIN.md`   |
-| `DELETE` | `/admin/user/{id}`              | ✅   | Admin     | `api/ADMIN.md`   |
+| Method   | Endpoint                        | Auth | Role      | Doc File          |
+| -------- | ------------------------------- | ---- | --------- | ----------------- |
+| `POST`   | `/auth/register`                | ❌   | —         | `api/AUTH.md`     |
+| `POST`   | `/auth/login`                   | ❌   | —         | `api/AUTH.md`     |
+| `POST`   | `/bookings`                     | ✅   | Passenger | `api/BOOKINGS.md` |
+| `GET`    | `/bookings`                     | ✅   | Any       | `api/BOOKINGS.md` |
+| `GET`    | `/bookings/{id}`                | ✅   | Any       | `api/BOOKINGS.md` |
+| `GET`    | `/passenger/history`            | ✅   | Passenger | `api/BOOKINGS.md` |
+| `GET`    | `/driver/requests`              | ✅   | Driver    | `api/DRIVER.md`   |
+| `POST`   | `/driver/accept/{booking_id}`   | ✅   | Driver    | `api/DRIVER.md`   |
+| `POST`   | `/driver/reject/{booking_id}`   | ✅   | Driver    | `api/DRIVER.md`   |
+| `POST`   | `/driver/complete/{booking_id}` | ✅   | Driver    | `api/DRIVER.md`   |
+| `PUT`    | `/driver/location`              | ✅   | Driver    | `api/DRIVER.md`   |
+| `PUT`    | `/user/fcm-token`               | ✅   | Any       | `api/FCM.md`      |
+| `GET`    | `/admin/users`                  | ✅   | Admin     | `api/ADMIN.md`    |
+| `GET`    | `/admin/drivers/pending`        | ✅   | Admin     | `api/ADMIN.md`    |
+| `GET`    | `/admin/bookings`               | ✅   | Admin     | `api/ADMIN.md`    |
+| `PUT`    | `/admin/driver/approve/{id}`    | ✅   | Admin     | `api/ADMIN.md`    |
+| `PUT`    | `/admin/driver/reject/{id}`     | ✅   | Admin     | `api/ADMIN.md`    |
+| `PUT`    | `/admin/user/activate/{id}`     | ✅   | Admin     | `api/ADMIN.md`    |
+| `PUT`    | `/admin/user/deactivate/{id}`   | ✅   | Admin     | `api/ADMIN.md`    |
+| `DELETE` | `/admin/user/{id}`              | ✅   | Admin     | `api/ADMIN.md`    |
 
 ---
 
 ## 🗄️ Database Tables
 
-| Table          | Purpose                                         | Model Doc               |
-| -------------- | ----------------------------------------------- | ----------------------- |
-| `users`        | All users — passengers, drivers, admins         | `models/USER.md`        |
-| `driver_info`  | Extended driver profile + approval status       | `models/DRIVER_INFO.md` |
-| `bookings`     | All ride booking records                        | `models/BOOKING.md`     |
-| `booking_logs` | Audit trail of every booking status change      | `models/BOOKING.md`     |
-| `fcm_tokens`   | FCM push token per user (upserted on login)     | `models/FCM_TOKEN.md`   |
+| Table          | Purpose                                     | Model Doc               |
+| -------------- | ------------------------------------------- | ----------------------- |
+| `users`        | All users — passengers, drivers, admins     | `models/USER.md`        |
+| `driver_info`  | Extended driver profile + approval status   | `models/DRIVER_INFO.md` |
+| `bookings`     | All ride booking records                    | `models/BOOKING.md`     |
+| `booking_logs` | Audit trail of every booking status change  | `models/BOOKING.md`     |
+| `fcm_tokens`   | FCM push token per user (upserted on login) | `models/FCM_TOKEN.md`   |
 
 ---
 
@@ -101,27 +101,27 @@ Tokens are obtained from `POST /auth/login`. Roles encoded in the JWT payload:
 
 > **Rule:** Every backend change that affects an API contract MUST update the matching doc file before the PR is merged.
 
-| Backend Change                              | Update These Files                              |
-| ------------------------------------------- | ----------------------------------------------- |
-| New endpoint added                          | `INDEX.md` table + matching `api/*.md` file     |
-| Endpoint request/response shape changed     | Matching `api/*.md` + `models/*.md` if needed   |
-| New DB column added                         | Matching `models/*.md` + Kotlin data class      |
-| New DB table added                          | New `models/*.md` + `INDEX.md` table            |
-| Auth rules changed (role, status checks)    | `api/AUTH.md` + matching `flows/*.md`           |
-| New business flow                           | New or updated `flows/*.md`                     |
-| Bug found & fixed                           | `BUGS_AND_FIXES.md`                             |
+| Backend Change                           | Update These Files                            |
+| ---------------------------------------- | --------------------------------------------- |
+| New endpoint added                       | `INDEX.md` table + matching `api/*.md` file   |
+| Endpoint request/response shape changed  | Matching `api/*.md` + `models/*.md` if needed |
+| New DB column added                      | Matching `models/*.md` + Kotlin data class    |
+| New DB table added                       | New `models/*.md` + `INDEX.md` table          |
+| Auth rules changed (role, status checks) | `api/AUTH.md` + matching `flows/*.md`         |
+| New business flow                        | New or updated `flows/*.md`                   |
+| Bug found & fixed                        | `BUGS_AND_FIXES.md`                           |
 
 ---
 
 ## 📚 Legacy Guide Files (kept for reference)
 
-| File                          | Purpose                                      |
-| ----------------------------- | -------------------------------------------- |
-| `README.md`                   | Setup instructions, quick endpoint overview  |
-| `PROJECT_STRUCTURE.md`        | Backend + Android folder structure           |
-| `DEVELOPMENT_CHECKLIST.md`    | Phase-by-phase task checklist                |
-| `BUGS_AND_FIXES.md`           | Issue log with root causes and fixes         |
-| `Mobile-Based Tricycle...md`  | Original MVP roadmap document                |
+| File                         | Purpose                                     |
+| ---------------------------- | ------------------------------------------- |
+| `README.md`                  | Setup instructions, quick endpoint overview |
+| `PROJECT_STRUCTURE.md`       | Backend + Android folder structure          |
+| `DEVELOPMENT_CHECKLIST.md`   | Phase-by-phase task checklist               |
+| `BUGS_AND_FIXES.md`          | Issue log with root causes and fixes        |
+| `Mobile-Based Tricycle...md` | Original MVP roadmap document               |
 
 ---
 

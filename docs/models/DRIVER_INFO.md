@@ -28,17 +28,17 @@ CREATE TABLE driver_info (
 
 ### Column Reference
 
-| Column            | Type                              | Notes                                                |
-| ----------------- | --------------------------------- | ---------------------------------------------------- |
-| `id`              | INT UNSIGNED, PK                  | Auto-assigned                                        |
-| `user_id`         | INT UNSIGNED, FK, UNIQUE          | 1:1 with `users.id` — cascade delete                 |
-| `license_no`      | VARCHAR(50), nullable             | Driver's license number — provided at registration   |
-| `vehicle_no`      | VARCHAR(50), nullable             | Tricycle plate/vehicle number                        |
-| `approval_status` | ENUM                              | `pending` \| `approved` \| `rejected`                |
-| `current_lat`     | DECIMAL(10,7), nullable           | Updated by `PUT /driver/location`                    |
-| `current_lng`     | DECIMAL(10,7), nullable           | Updated by `PUT /driver/location`                    |
-| `created_at`      | DATETIME                          | Auto-set on INSERT                                   |
-| `updated_at`      | DATETIME                          | Auto-updated on any UPDATE                           |
+| Column            | Type                     | Notes                                              |
+| ----------------- | ------------------------ | -------------------------------------------------- |
+| `id`              | INT UNSIGNED, PK         | Auto-assigned                                      |
+| `user_id`         | INT UNSIGNED, FK, UNIQUE | 1:1 with `users.id` — cascade delete               |
+| `license_no`      | VARCHAR(50), nullable    | Driver's license number — provided at registration |
+| `vehicle_no`      | VARCHAR(50), nullable    | Tricycle plate/vehicle number                      |
+| `approval_status` | ENUM                     | `pending` \| `approved` \| `rejected`              |
+| `current_lat`     | DECIMAL(10,7), nullable  | Updated by `PUT /driver/location`                  |
+| `current_lng`     | DECIMAL(10,7), nullable  | Updated by `PUT /driver/location`                  |
+| `created_at`      | DATETIME                 | Auto-set on INSERT                                 |
+| `updated_at`      | DATETIME                 | Auto-updated on any UPDATE                         |
 
 ### Approval Status Lifecycle
 
@@ -47,11 +47,11 @@ CREATE TABLE driver_info (
            ──(admin reject) ──→  [rejected]
 ```
 
-| Status     | Login Allowed | Can Accept Rides | Set By     |
-| ---------- | ------------- | ---------------- | ---------- |
-| `pending`  | ❌ (403)       | ❌                | System (default on register) |
-| `approved` | ✅             | ✅                | Admin via `PUT /admin/driver/approve/{id}` |
-| `rejected` | ❌ (403)       | ❌                | Admin via `PUT /admin/driver/reject/{id}`  |
+| Status     | Login Allowed | Can Accept Rides | Set By                                     |
+| ---------- | ------------- | ---------------- | ------------------------------------------ |
+| `pending`  | ❌ (403)      | ❌               | System (default on register)               |
+| `approved` | ✅            | ✅               | Admin via `PUT /admin/driver/approve/{id}` |
+| `rejected` | ❌ (403)      | ❌               | Admin via `PUT /admin/driver/reject/{id}`  |
 
 ---
 
@@ -70,23 +70,23 @@ users.id (1) ──────────── (1) driver_info.user_id
 
 From `models/User.php`:
 
-| Method                                           | Description                              |
-| ------------------------------------------------ | ---------------------------------------- |
-| `register()` — driver branch                     | Creates `users` row + `driver_info` row  |
+| Method                       | Description                             |
+| ---------------------------- | --------------------------------------- |
+| `register()` — driver branch | Creates `users` row + `driver_info` row |
 
 From `models/Admin.php`:
 
-| Method                                              | Description                                    |
-| --------------------------------------------------- | ---------------------------------------------- |
-| `getPendingDrivers(): array`                        | JOIN users+driver_info WHERE approval_status='pending' |
-| `approveDriver(int $userId): bool`                  | Sets approval_status='approved'                |
-| `rejectDriver(int $userId): bool`                   | Sets approval_status='rejected'                |
+| Method                             | Description                                            |
+| ---------------------------------- | ------------------------------------------------------ |
+| `getPendingDrivers(): array`       | JOIN users+driver_info WHERE approval_status='pending' |
+| `approveDriver(int $userId): bool` | Sets approval_status='approved'                        |
+| `rejectDriver(int $userId): bool`  | Sets approval_status='rejected'                        |
 
 From `controllers/DriverController.php`:
 
-| Method                                        | Description                        |
-| --------------------------------------------- | ---------------------------------- |
-| `updateLocation()`                             | Updates current_lat, current_lng   |
+| Method             | Description                      |
+| ------------------ | -------------------------------- |
+| `updateLocation()` | Updates current_lat, current_lng |
 
 ---
 
@@ -151,12 +151,12 @@ object DriverApprovalStatus {
 
 ## Sync Rules
 
-| Backend Change                                       | Update Here                                   |
-| ---------------------------------------------------- | --------------------------------------------- |
-| New column added to `driver_info` (e.g., `photo_url`)| MySQL table + Column Reference + data classes |
-| New approval status value added                      | ENUM + Approval Status Lifecycle table        |
-| Location update extended (e.g., `heading`)           | `UpdateLocationRequest` + column reference    |
-| Driver profile endpoint added (GET driver details)   | New section in `api/DRIVER.md` + here         |
+| Backend Change                                        | Update Here                                   |
+| ----------------------------------------------------- | --------------------------------------------- |
+| New column added to `driver_info` (e.g., `photo_url`) | MySQL table + Column Reference + data classes |
+| New approval status value added                       | ENUM + Approval Status Lifecycle table        |
+| Location update extended (e.g., `heading`)            | `UpdateLocationRequest` + column reference    |
+| Driver profile endpoint added (GET driver details)    | New section in `api/DRIVER.md` + here         |
 
 ---
 

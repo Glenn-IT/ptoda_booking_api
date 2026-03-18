@@ -126,11 +126,11 @@ private val pollRunnable = object : Runnable {
 
 ## Sync Rules
 
-| Backend Change                          | Update Here                          |
-| --------------------------------------- | ------------------------------------ |
-| New status value added                  | Lifecycle diagram + stage table      |
-| FCM payload content changed             | Steps 3a and 4 notification content  |
-| Cancel endpoint added for passengers    | Add Step 3c with cancel flow         |
+| Backend Change                       | Update Here                         |
+| ------------------------------------ | ----------------------------------- |
+| New status value added               | Lifecycle diagram + stage table     |
+| FCM payload content changed          | Steps 3a and 4 notification content |
+| Cancel endpoint added for passengers | Add Step 3c with cancel flow        |
 
 ---
 

@@ -12,6 +12,7 @@ It must be registered or refreshed with the server so that the backend can send 
 notifications (e.g., "A driver has accepted your ride!") to the correct device.
 
 **When to call this endpoint:**
+
 - After a successful login
 - Whenever `onNewToken()` fires in `PTODAFirebaseMessagingService`
 
@@ -54,11 +55,11 @@ Uses an upsert: if a token record exists for the user, it is updated; otherwise 
 
 ### Error Responses
 
-| HTTP | Condition              | Message                             |
-| ---- | ---------------------- | ----------------------------------- |
-| 401  | No/invalid token       | `"Authorization token is required."` |
-| 422  | Missing `token` field  | `"FCM token is required."`          |
-| 500  | DB error               | `"Failed to update FCM token."`     |
+| HTTP | Condition             | Message                              |
+| ---- | --------------------- | ------------------------------------ |
+| 401  | No/invalid token      | `"Authorization token is required."` |
+| 422  | Missing `token` field | `"FCM token is required."`           |
+| 500  | DB error              | `"Failed to update FCM token."`      |
 
 ---
 
@@ -163,11 +164,11 @@ if (savedFcmToken != null) {
 
 ## Sync Rules
 
-| Backend Change                                    | Update Here                              |
-| ------------------------------------------------- | ---------------------------------------- |
-| Endpoint moved out of `index.php` to controller  | Update "PHP handler" reference           |
-| Request body adds `device_type` field             | Request body + `FcmTokenRequest`         |
-| Multi-device token support (multiple rows)        | Overview + upsert note + data class      |
+| Backend Change                                  | Update Here                         |
+| ----------------------------------------------- | ----------------------------------- |
+| Endpoint moved out of `index.php` to controller | Update "PHP handler" reference      |
+| Request body adds `device_type` field           | Request body + `FcmTokenRequest`    |
+| Multi-device token support (multiple rows)      | Overview + upsert note + data class |
 
 ---
 

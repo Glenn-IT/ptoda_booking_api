@@ -248,12 +248,12 @@ class PTODAApplication : Application() {
 
 ## 8. Base URL Reference
 
-| Where you're running         | Use this BASE_URL                           |
-| ---------------------------- | ------------------------------------------- |
-| Android Emulator + Apache    | `http://10.0.2.2/ptoda_booking_api/`        |
-| Android Emulator + php -S    | `http://10.0.2.2:8001/`                     |
-| Physical device + Apache     | `http://192.168.x.x/ptoda_booking_api/`     |
-| Physical device + php -S     | `http://192.168.x.x:8001/`                  |
+| Where you're running      | Use this BASE_URL                       |
+| ------------------------- | --------------------------------------- |
+| Android Emulator + Apache | `http://10.0.2.2/ptoda_booking_api/`    |
+| Android Emulator + php -S | `http://10.0.2.2:8001/`                 |
+| Physical device + Apache  | `http://192.168.x.x/ptoda_booking_api/` |
+| Physical device + php -S  | `http://192.168.x.x:8001/`              |
 
 > Run `ipconfig` on Windows to find your PC's local IP for physical device testing.
 
@@ -261,11 +261,11 @@ class PTODAApplication : Application() {
 
 ## Sync Rules
 
-| Backend Change                          | Update Here                            |
-| --------------------------------------- | -------------------------------------- |
-| New endpoint added                      | `ApiService` interface + matching section |
-| Base URL path changes                   | `ApiClient` BASE_URL + Constants table |
-| New request/response model added        | Import correct data class in ApiService|
+| Backend Change                   | Update Here                               |
+| -------------------------------- | ----------------------------------------- |
+| New endpoint added               | `ApiService` interface + matching section |
+| Base URL path changes            | `ApiClient` BASE_URL + Constants table    |
+| New request/response model added | Import correct data class in ApiService   |
 
 ---
 

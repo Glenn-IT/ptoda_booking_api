@@ -9,11 +9,11 @@
 
 The bookings API is **role-aware**: the same endpoints return different data depending on the caller's JWT role.
 
-| Role        | `GET /bookings` returns             |
-| ----------- | ----------------------------------- |
-| `passenger` | Only their own bookings             |
-| `driver`    | Only bookings assigned to them      |
-| `admin`     | All bookings in the system          |
+| Role        | `GET /bookings` returns        |
+| ----------- | ------------------------------ |
+| `passenger` | Only their own bookings        |
+| `driver`    | Only bookings assigned to them |
+| `admin`     | All bookings in the system     |
 
 Booking status lifecycle:
 
@@ -37,12 +37,12 @@ Create a new ride request. Passenger role only.
 
 ```json
 {
-  "pickup_address":  "string — required",
-  "pickup_lat":      "decimal — required (e.g. 14.5995)",
-  "pickup_lng":      "decimal — required (e.g. 120.9750)",
+  "pickup_address": "string — required",
+  "pickup_lat": "decimal — required (e.g. 14.5995)",
+  "pickup_lng": "decimal — required (e.g. 120.9750)",
   "dropoff_address": "string — required",
-  "dropoff_lat":     "decimal — required",
-  "dropoff_lng":     "decimal — required"
+  "dropoff_lat": "decimal — required",
+  "dropoff_lng": "decimal — required"
 }
 ```
 
@@ -50,12 +50,12 @@ Create a new ride request. Passenger role only.
 
 ```json
 {
-  "pickup_address":  "Quiapo Market, Manila",
-  "pickup_lat":      14.5995,
-  "pickup_lng":      120.9750,
+  "pickup_address": "Quiapo Market, Manila",
+  "pickup_lat": 14.5995,
+  "pickup_lng": 120.975,
   "dropoff_address": "Rizal Park, Manila",
-  "dropoff_lat":     14.5833,
-  "dropoff_lng":     120.9797
+  "dropoff_lat": 14.5833,
+  "dropoff_lng": 120.9797
 }
 ```
 
@@ -73,12 +73,12 @@ Create a new ride request. Passenger role only.
 
 ### Error Responses
 
-| HTTP | Condition                    | Message                              |
-| ---- | ---------------------------- | ------------------------------------ |
-| 401  | No/invalid token             | `"Authorization token is required."` |
-| 403  | Role is not passenger        | `"You do not have permission."`      |
-| 422  | Missing required field       | `"Field 'pickup_address' is required."` |
-| 500  | DB error                     | `"Failed to create booking."`        |
+| HTTP | Condition              | Message                                 |
+| ---- | ---------------------- | --------------------------------------- |
+| 401  | No/invalid token       | `"Authorization token is required."`    |
+| 403  | Role is not passenger  | `"You do not have permission."`         |
+| 422  | Missing required field | `"Field 'pickup_address' is required."` |
+| 500  | DB error               | `"Failed to create booking."`           |
 
 ---
 
@@ -128,9 +128,9 @@ if the booking belongs to them (passenger or driver). Admins can see any.
 
 ### URL Parameter
 
-| Param | Type | Description      |
-| ----- | ---- | ---------------- |
-| `id`  | int  | Booking ID       |
+| Param | Type | Description |
+| ----- | ---- | ----------- |
+| `id`  | int  | Booking ID  |
 
 ### Success Response — `200 OK`
 
@@ -157,10 +157,10 @@ if the booking belongs to them (passenger or driver). Admins can see any.
 
 ### Error Responses
 
-| HTTP | Condition          | Message                |
-| ---- | ------------------ | ---------------------- |
-| 404  | Booking not found  | `"Booking not found."` |
-| 403  | Not their booking  | `"You do not have permission."` |
+| HTTP | Condition         | Message                         |
+| ---- | ----------------- | ------------------------------- |
+| 404  | Booking not found | `"Booking not found."`          |
+| 403  | Not their booking | `"You do not have permission."` |
 
 ---
 
@@ -279,12 +279,12 @@ override fun onPause() {
 
 ## Sync Rules
 
-| Backend Change                                 | Update Here                                 |
-| ---------------------------------------------- | ------------------------------------------- |
-| New field added to bookings table              | `Booking` data class + response examples    |
-| New booking status value added                 | `BookingStatus` object + lifecycle diagram  |
-| Role filtering logic changed                   | Overview table + error responses            |
-| New endpoint for bookings (e.g., cancel)       | Add new section + `INDEX.md` endpoint table |
+| Backend Change                           | Update Here                                 |
+| ---------------------------------------- | ------------------------------------------- |
+| New field added to bookings table        | `Booking` data class + response examples    |
+| New booking status value added           | `BookingStatus` object + lifecycle diagram  |
+| Role filtering logic changed             | Overview table + error responses            |
+| New endpoint for bookings (e.g., cancel) | Add new section + `INDEX.md` endpoint table |
 
 ---
 

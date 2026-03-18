@@ -8,6 +8,7 @@
 ## Overview
 
 All driver endpoints require:
+
 1. A valid JWT token (`Authorization: Bearer <token>`)
 2. The token's role must be `driver`
 3. The driver's `approval_status` in `driver_info` must be `approved`
@@ -51,10 +52,10 @@ Fetch all bookings with `status = 'requested'` that are not yet assigned to any 
 
 ### Error Responses
 
-| HTTP | Condition              | Message                             |
-| ---- | ---------------------- | ----------------------------------- |
-| 401  | No/invalid token       | `"Authorization token is required."` |
-| 403  | Role is not driver     | `"You do not have permission."`     |
+| HTTP | Condition          | Message                              |
+| ---- | ------------------ | ------------------------------------ |
+| 401  | No/invalid token   | `"Authorization token is required."` |
+| 403  | Role is not driver | `"You do not have permission."`      |
 
 ---
 
@@ -69,9 +70,9 @@ Triggers an FCM push notification to the passenger.
 
 ### URL Parameter
 
-| Param        | Type | Description  |
-| ------------ | ---- | ------------ |
-| `booking_id` | int  | Booking ID   |
+| Param        | Type | Description |
+| ------------ | ---- | ----------- |
+| `booking_id` | int  | Booking ID  |
 
 ### Request Body
 
@@ -89,11 +90,11 @@ _None required._
 
 ### Error Responses
 
-| HTTP | Condition                         | Message                                      |
-| ---- | --------------------------------- | -------------------------------------------- |
-| 404  | Booking not found                 | `"Booking not found."`                       |
-| 409  | Booking already accepted by other | `"Booking is no longer available."`          |
-| 403  | Role is not driver                | `"You do not have permission."`              |
+| HTTP | Condition                         | Message                             |
+| ---- | --------------------------------- | ----------------------------------- |
+| 404  | Booking not found                 | `"Booking not found."`              |
+| 409  | Booking already accepted by other | `"Booking is no longer available."` |
+| 403  | Role is not driver                | `"You do not have permission."`     |
 
 ---
 
@@ -107,9 +108,9 @@ Reject a pending booking. Sets `status` to `rejected`.
 
 ### URL Parameter
 
-| Param        | Type | Description  |
-| ------------ | ---- | ------------ |
-| `booking_id` | int  | Booking ID   |
+| Param        | Type | Description |
+| ------------ | ---- | ----------- |
+| `booking_id` | int  | Booking ID  |
 
 ### Request Body
 
@@ -127,10 +128,10 @@ _None required._
 
 ### Error Responses
 
-| HTTP | Condition              | Message                        |
-| ---- | ---------------------- | ------------------------------ |
-| 404  | Booking not found      | `"Booking not found."`         |
-| 403  | Role is not driver     | `"You do not have permission."` |
+| HTTP | Condition          | Message                         |
+| ---- | ------------------ | ------------------------------- |
+| 404  | Booking not found  | `"Booking not found."`          |
+| 403  | Role is not driver | `"You do not have permission."` |
 
 ---
 
@@ -145,9 +146,9 @@ Triggers an FCM push notification to the passenger.
 
 ### URL Parameter
 
-| Param        | Type | Description  |
-| ------------ | ---- | ------------ |
-| `booking_id` | int  | Booking ID   |
+| Param        | Type | Description |
+| ------------ | ---- | ----------- |
+| `booking_id` | int  | Booking ID  |
 
 ### Request Body
 
@@ -165,11 +166,11 @@ _None required._
 
 ### Error Responses
 
-| HTTP | Condition                       | Message                          |
-| ---- | ------------------------------- | -------------------------------- |
-| 404  | Booking not found               | `"Booking not found."`           |
-| 403  | Booking not assigned to driver  | `"You do not have permission."`  |
-| 403  | Role is not driver              | `"You do not have permission."`  |
+| HTTP | Condition                      | Message                         |
+| ---- | ------------------------------ | ------------------------------- |
+| 404  | Booking not found              | `"Booking not found."`          |
+| 403  | Booking not assigned to driver | `"You do not have permission."` |
+| 403  | Role is not driver             | `"You do not have permission."` |
 
 ---
 
@@ -196,7 +197,7 @@ and `driver_info.current_lng`.
 ```json
 {
   "lat": 14.5995,
-  "lng": 120.9750
+  "lng": 120.975
 }
 ```
 
@@ -212,10 +213,10 @@ and `driver_info.current_lng`.
 
 ### Error Responses
 
-| HTTP | Condition              | Message                             |
-| ---- | ---------------------- | ----------------------------------- |
-| 422  | Missing lat or lng     | `"lat and lng are required."`       |
-| 403  | Role is not driver     | `"You do not have permission."`     |
+| HTTP | Condition          | Message                         |
+| ---- | ------------------ | ------------------------------- |
+| 422  | Missing lat or lng | `"lat and lng are required."`   |
+| 403  | Role is not driver | `"You do not have permission."` |
 
 ---
 
@@ -269,11 +270,11 @@ fusedLocationClient.lastLocation.addOnSuccessListener { location ->
 
 ## Sync Rules
 
-| Backend Change                                     | Update Here                              |
-| -------------------------------------------------- | ---------------------------------------- |
-| New driver action endpoint added                   | New section + `INDEX.md` endpoint table  |
-| `acceptRide` response adds booking snapshot        | Success Response + `Booking` data class  |
-| Location endpoint adds `heading` / `speed` fields  | Request body + `UpdateLocationRequest`   |
+| Backend Change                                    | Update Here                             |
+| ------------------------------------------------- | --------------------------------------- |
+| New driver action endpoint added                  | New section + `INDEX.md` endpoint table |
+| `acceptRide` response adds booking snapshot       | Success Response + `Booking` data class |
+| Location endpoint adds `heading` / `speed` fields | Request body + `UpdateLocationRequest`  |
 
 ---
 

@@ -35,20 +35,20 @@ CREATE TABLE bookings (
 
 ### Column Reference
 
-| Column           | Type              | Notes                                              |
-| ---------------- | ----------------- | -------------------------------------------------- |
-| `id`             | INT UNSIGNED, PK  | Auto-assigned booking identifier                   |
-| `passenger_id`   | INT UNSIGNED, FK  | References `users.id` — cascade delete             |
-| `driver_id`      | INT UNSIGNED, FK  | NULL until a driver accepts; SET NULL on user delete |
-| `pickup_address` | VARCHAR(255)      | Human-readable pickup location                     |
-| `pickup_lat`     | DECIMAL(10,7)     | Latitude to 7 decimal places                       |
-| `pickup_lng`     | DECIMAL(10,7)     | Longitude to 7 decimal places                      |
-| `dropoff_address`| VARCHAR(255)      | Human-readable drop-off location                   |
-| `dropoff_lat`    | DECIMAL(10,7)     | Latitude to 7 decimal places                       |
-| `dropoff_lng`    | DECIMAL(10,7)     | Longitude to 7 decimal places                      |
-| `status`         | ENUM              | See status lifecycle below                         |
-| `created_at`     | DATETIME          | Auto-set on INSERT                                 |
-| `updated_at`     | DATETIME          | Auto-updated on any UPDATE                         |
+| Column            | Type             | Notes                                                |
+| ----------------- | ---------------- | ---------------------------------------------------- |
+| `id`              | INT UNSIGNED, PK | Auto-assigned booking identifier                     |
+| `passenger_id`    | INT UNSIGNED, FK | References `users.id` — cascade delete               |
+| `driver_id`       | INT UNSIGNED, FK | NULL until a driver accepts; SET NULL on user delete |
+| `pickup_address`  | VARCHAR(255)     | Human-readable pickup location                       |
+| `pickup_lat`      | DECIMAL(10,7)    | Latitude to 7 decimal places                         |
+| `pickup_lng`      | DECIMAL(10,7)    | Longitude to 7 decimal places                        |
+| `dropoff_address` | VARCHAR(255)     | Human-readable drop-off location                     |
+| `dropoff_lat`     | DECIMAL(10,7)    | Latitude to 7 decimal places                         |
+| `dropoff_lng`     | DECIMAL(10,7)    | Longitude to 7 decimal places                        |
+| `status`          | ENUM             | See status lifecycle below                           |
+| `created_at`      | DATETIME         | Auto-set on INSERT                                   |
+| `updated_at`      | DATETIME         | Auto-updated on any UPDATE                           |
 
 ### Booking Status Lifecycle
 
@@ -58,14 +58,14 @@ CREATE TABLE bookings (
 [requested] ↘ [cancelled]                     (future: passenger cancels)
 ```
 
-| Status        | Set By     | Meaning                                      |
-| ------------- | ---------- | -------------------------------------------- |
-| `requested`   | Passenger  | Booking created, waiting for a driver        |
-| `accepted`    | Driver     | Driver has accepted the booking              |
-| `in_progress` | Driver     | Ride is actively ongoing (future phase)      |
-| `completed`   | Driver     | Ride successfully finished                   |
-| `rejected`    | Driver     | Driver declined this specific booking        |
-| `cancelled`   | Passenger  | Passenger cancelled before acceptance (future)|
+| Status        | Set By    | Meaning                                        |
+| ------------- | --------- | ---------------------------------------------- |
+| `requested`   | Passenger | Booking created, waiting for a driver          |
+| `accepted`    | Driver    | Driver has accepted the booking                |
+| `in_progress` | Driver    | Ride is actively ongoing (future phase)        |
+| `completed`   | Driver    | Ride successfully finished                     |
+| `rejected`    | Driver    | Driver declined this specific booking          |
+| `cancelled`   | Passenger | Passenger cancelled before acceptance (future) |
 
 ---
 
@@ -88,26 +88,26 @@ CREATE TABLE booking_logs (
 
 ### Column Reference
 
-| Column       | Type         | Notes                                        |
-| ------------ | ------------ | -------------------------------------------- |
-| `id`         | INT UNSIGNED | Auto-assigned log entry identifier           |
-| `booking_id` | INT, FK      | References `bookings.id` — cascade delete    |
-| `old_status` | VARCHAR(20)  | NULL for the initial `requested` entry       |
-| `new_status` | VARCHAR(20)  | The status after this change                 |
-| `changed_at` | DATETIME     | Timestamp of the change                      |
+| Column       | Type         | Notes                                     |
+| ------------ | ------------ | ----------------------------------------- |
+| `id`         | INT UNSIGNED | Auto-assigned log entry identifier        |
+| `booking_id` | INT, FK      | References `bookings.id` — cascade delete |
+| `old_status` | VARCHAR(20)  | NULL for the initial `requested` entry    |
+| `new_status` | VARCHAR(20)  | The status after this change              |
+| `changed_at` | DATETIME     | Timestamp of the change                   |
 
 ---
 
 ## PHP Model Methods (`models/Booking.php`)
 
-| Method                                              | Description                                     |
-| --------------------------------------------------- | ----------------------------------------------- |
-| `create(array $data): int`                          | Insert booking, log initial status              |
-| `getById(int $id): array\|null`                     | Fetch single booking by ID                      |
-| `updateStatus(int $id, string $status, int $driverId = null): bool` | Update status + log the change |
-| `getByPassenger(int $passengerId): array`            | All bookings for a passenger                    |
-| `getByDriver(int $driverId): array`                 | All bookings assigned to a driver               |
-| `getPendingRequests(): array`                       | All `status = 'requested'` bookings             |
+| Method                                                              | Description                         |
+| ------------------------------------------------------------------- | ----------------------------------- |
+| `create(array $data): int`                                          | Insert booking, log initial status  |
+| `getById(int $id): array\|null`                                     | Fetch single booking by ID          |
+| `updateStatus(int $id, string $status, int $driverId = null): bool` | Update status + log the change      |
+| `getByPassenger(int $passengerId): array`                           | All bookings for a passenger        |
+| `getByDriver(int $driverId): array`                                 | All bookings assigned to a driver   |
+| `getPendingRequests(): array`                                       | All `status = 'requested'` bookings |
 
 ---
 
@@ -189,12 +189,12 @@ map.animateCamera(CameraUpdateFactory.newLatLngZoom(pickupLatLng, 15f))
 
 ## Sync Rules
 
-| Backend Change                                   | Update Here                                  |
-| ------------------------------------------------ | -------------------------------------------- |
-| New column added to `bookings`                   | MySQL table + Column Reference + `Booking` data class |
-| New status value added                           | Status Lifecycle + `BookingStatus` object    |
-| New `Booking.php` method added                   | PHP Model Methods table                      |
-| `booking_logs` schema changed                    | `booking_logs` section                       |
+| Backend Change                 | Update Here                                           |
+| ------------------------------ | ----------------------------------------------------- |
+| New column added to `bookings` | MySQL table + Column Reference + `Booking` data class |
+| New status value added         | Status Lifecycle + `BookingStatus` object             |
+| New `Booking.php` method added | PHP Model Methods table                               |
+| `booking_logs` schema changed  | `booking_logs` section                                |
 
 ---
 

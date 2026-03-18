@@ -23,16 +23,16 @@ CREATE TABLE users (
 
 ### Column Reference
 
-| Column       | Type                              | Notes                                      |
-| ------------ | --------------------------------- | ------------------------------------------ |
-| `id`         | INT UNSIGNED, PK, AUTO_INCREMENT  | System-assigned user identifier            |
-| `name`       | VARCHAR(100)                      | Display name                               |
-| `email`      | VARCHAR(150), UNIQUE              | Login credential, case-insensitive         |
-| `password`   | VARCHAR(255)                      | `password_hash()` bcrypt — never returned in API |
-| `role`       | ENUM                              | `passenger` \| `driver` \| `admin`         |
-| `status`     | ENUM                              | `active` \| `inactive` — controls login access |
-| `created_at` | DATETIME                          | Auto-set on INSERT                         |
-| `updated_at` | DATETIME                          | Auto-updated on any UPDATE                 |
+| Column       | Type                             | Notes                                            |
+| ------------ | -------------------------------- | ------------------------------------------------ |
+| `id`         | INT UNSIGNED, PK, AUTO_INCREMENT | System-assigned user identifier                  |
+| `name`       | VARCHAR(100)                     | Display name                                     |
+| `email`      | VARCHAR(150), UNIQUE             | Login credential, case-insensitive               |
+| `password`   | VARCHAR(255)                     | `password_hash()` bcrypt — never returned in API |
+| `role`       | ENUM                             | `passenger` \| `driver` \| `admin`               |
+| `status`     | ENUM                             | `active` \| `inactive` — controls login access   |
+| `created_at` | DATETIME                         | Auto-set on INSERT                               |
+| `updated_at` | DATETIME                         | Auto-updated on any UPDATE                       |
 
 ### Business Rules
 
@@ -56,11 +56,11 @@ users (1) ──────── (*) bookings      [as driver_id]
 
 ## PHP Model Methods (`models/User.php`)
 
-| Method                                   | Description                                    |
-| ---------------------------------------- | ---------------------------------------------- |
-| `register(array $data): int`             | Insert user (+ driver_info if driver)          |
-| `findByEmail(string $email): array\|null` | Lookup user for login                          |
-| `updateFCMToken(int $userId, string $token): void` | Upsert `fcm_tokens` row              |
+| Method                                             | Description                           |
+| -------------------------------------------------- | ------------------------------------- |
+| `register(array $data): int`                       | Insert user (+ driver_info if driver) |
+| `findByEmail(string $email): array\|null`          | Lookup user for login                 |
+| `updateFCMToken(int $userId, string $token): void` | Upsert `fcm_tokens` row               |
 
 ---
 
@@ -171,12 +171,12 @@ object PrefsManager {
 
 ## Sync Rules
 
-| Backend Change                             | Update Here                               |
-| ------------------------------------------ | ----------------------------------------- |
-| New column added to `users` table          | MySQL table + Column Reference + data class |
-| New role added (e.g., `supervisor`)        | ENUM values + `UserRole` constants        |
-| New status value added                     | ENUM values + `UserStatus` constants      |
-| New `User.php` method added                | PHP Model Methods table                   |
+| Backend Change                      | Update Here                                 |
+| ----------------------------------- | ------------------------------------------- |
+| New column added to `users` table   | MySQL table + Column Reference + data class |
+| New role added (e.g., `supervisor`) | ENUM values + `UserRole` constants          |
+| New status value added              | ENUM values + `UserStatus` constants        |
+| New `User.php` method added         | PHP Model Methods table                     |
 
 ---
 

@@ -100,10 +100,10 @@ Driver App               PHP Backend
 
 These are two **separate** checks on login for drivers:
 
-| Check                        | Field                         | Blocked Message                                         |
-| ---------------------------- | ----------------------------- | ------------------------------------------------------- |
-| Account active?              | `users.status`                | `"Your account has been deactivated. Contact admin."`   |
-| Driver approved?             | `driver_info.approval_status` | `"Your driver account is pending admin approval."`      |
+| Check            | Field                         | Blocked Message                                       |
+| ---------------- | ----------------------------- | ----------------------------------------------------- |
+| Account active?  | `users.status`                | `"Your account has been deactivated. Contact admin."` |
+| Driver approved? | `driver_info.approval_status` | `"Your driver account is pending admin approval."`    |
 
 Both must pass for a driver to log in.
 
@@ -111,11 +111,11 @@ Both must pass for a driver to log in.
 
 ## Sync Rules
 
-| Backend Change                                 | Update Here                            |
-| ---------------------------------------------- | -------------------------------------- |
-| FCM notification added on approve/reject       | Steps 4a/4b — add FCM push to diagram |
-| Email notification added on approve/reject     | Add email step to flow                 |
-| New approval status value added                | Overview diagram + step descriptions   |
+| Backend Change                             | Update Here                           |
+| ------------------------------------------ | ------------------------------------- |
+| FCM notification added on approve/reject   | Steps 4a/4b — add FCM push to diagram |
+| Email notification added on approve/reject | Add email step to flow                |
+| New approval status value added            | Overview diagram + step descriptions  |
 
 ---
 

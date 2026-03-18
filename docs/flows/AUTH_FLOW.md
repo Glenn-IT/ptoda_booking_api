@@ -141,12 +141,12 @@ val client = OkHttpClient.Builder()
 
 ## JWT Token Details
 
-| Property   | Value                                |
-| ---------- | ------------------------------------ |
-| Algorithm  | HS256                                |
-| Expiry     | 7 days (configurable in `config.php`) |
-| Payload    | `{ user_id, role, iat, exp }`        |
-| Storage    | Android SharedPreferences            |
+| Property  | Value                                 |
+| --------- | ------------------------------------- |
+| Algorithm | HS256                                 |
+| Expiry    | 7 days (configurable in `config.php`) |
+| Payload   | `{ user_id, role, iat, exp }`         |
+| Storage   | Android SharedPreferences             |
 
 ### Decoded Payload Example
 
@@ -182,25 +182,25 @@ fun navigateAfterLogin(role: String, context: Context) {
 
 ## Error Handling Reference
 
-| Scenario                               | HTTP | Message                                                   |
-| -------------------------------------- | ---- | --------------------------------------------------------- |
-| Wrong password                         | 401  | `"Invalid email or password."`                            |
-| Account deactivated                    | 403  | `"Your account has been deactivated. Contact admin."`     |
-| Driver pending approval                | 403  | `"Your driver account is pending admin approval."`        |
-| Driver rejected                        | 403  | `"Your driver account has been rejected. Contact admin."` |
-| Token expired or invalid               | 401  | `"Token has expired."` / `"Invalid token."`               |
-| No token sent                          | 401  | `"Authorization token is required."`                      |
+| Scenario                 | HTTP | Message                                                   |
+| ------------------------ | ---- | --------------------------------------------------------- |
+| Wrong password           | 401  | `"Invalid email or password."`                            |
+| Account deactivated      | 403  | `"Your account has been deactivated. Contact admin."`     |
+| Driver pending approval  | 403  | `"Your driver account is pending admin approval."`        |
+| Driver rejected          | 403  | `"Your driver account has been rejected. Contact admin."` |
+| Token expired or invalid | 401  | `"Token has expired."` / `"Invalid token."`               |
+| No token sent            | 401  | `"Authorization token is required."`                      |
 
 ---
 
 ## Sync Rules
 
-| Backend Change                                  | Update Here                               |
-| ----------------------------------------------- | ----------------------------------------- |
-| Token expiry duration changed                   | JWT Token Details table                   |
-| New role added                                  | Role-Based Navigation + `api/AUTH.md`     |
-| New login error condition added                 | Error Handling Reference table            |
-| Token refresh endpoint implemented              | Add new "Token Refresh Flow" section      |
+| Backend Change                     | Update Here                           |
+| ---------------------------------- | ------------------------------------- |
+| Token expiry duration changed      | JWT Token Details table               |
+| New role added                     | Role-Based Navigation + `api/AUTH.md` |
+| New login error condition added    | Error Handling Reference table        |
+| Token refresh endpoint implemented | Add new "Token Refresh Flow" section  |
 
 ---
 
