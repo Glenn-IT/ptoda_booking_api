@@ -79,13 +79,13 @@
 
 ### [BUG-005] `google-services.json` missing or in wrong location
 
-- **Date:** _(fill in when encountered)_
-- **Phase:** Phase 4 — Firebase Cloud Messaging
+- **Date:** 2026-03-21
+- **Phase:** Phase 4 — Firebase Cloud Messaging / Build
 - **File(s) affected:** `app/google-services.json`
-- **Description:** Android build fails with `File google-services.json is missing`.
-- **Root cause:** `google-services.json` was placed in the project root instead of the `app/` module directory.
-- **Fix applied:** Moved `google-services.json` into `PTODAApp/app/google-services.json`.
-- **Prevention tip:** Firebase always requires `google-services.json` to be inside the `app/` directory, not the project root.
+- **Description:** Android build fails with `Execution failed for task ':app:processDebugGoogleServices'. File google-services.json is missing.`
+- **Root cause:** `google-services.json` was placed in the project root (`MBPTODABookingApp/`) instead of the `app/` module directory. The Google Services Gradle plugin only searches inside `app/`.
+- **Fix applied:** Copied `google-services.json` from project root into `app/google-services.json`. Also updated `AndroidManifest.xml` to use the real Maps API key from the same file (`AIzaSyD4we-oa3wABCTt2iKZEyOnzoF-5pfb6mk`) replacing the `YOUR_MAPS_API_KEY` placeholder.
+- **Prevention tip:** Firebase always requires `google-services.json` to be inside the `app/` directory, not the project root. When adding Firebase to a project via Android Studio, the assistant will place it correctly — but if added manually, always double-check the path.
 
 ---
 
@@ -216,6 +216,84 @@
   3. Updated `database/schema.sql` with the correct hash for future imports.
   4. Applied the fix directly to the live DB via SQL `UPDATE` — no re-import needed.
 - **Prevention tip:** Never copy-paste bcrypt hashes from examples or other projects. Always generate the hash fresh with `password_hash()` and verify it immediately with `password_verify()` before committing to `schema.sql`.
+
+---
+
+### [BUG-015] Apache `.htaccess` `mod_rewrite` not routing sub-paths — all non-root API routes return 404
+
+- **Date:** 2026-03-21
+- **Phase:** Phase 3 — PHP Backend / Phase 5 — Integration Testing
+- **File(s) affected:** `C:\xampp\htdocs\ptoda_booking_api\.htaccess`
+- **Description:** Root endpoint `GET /ptoda_booking_api/` returned 200 correctly, but every sub-path (`/auth/login`, `/auth/register`, `/bookings`, etc.) returned Apache's native 404 HTML page — not a PHP-generated JSON response.
+- **Root cause:** The `.htaccess` `RewriteRule` was missing `RewriteBase`. Without it, Apache resolves the rewrite target (`index.php`) relative to the document root, so requests to sub-paths fail before reaching PHP.
+- **Fix applied:** Added `RewriteBase /ptoda_booking_api/` to `.htaccess` immediately after `RewriteEngine On`:
+
+  ```apache
+  Options -Indexes
+  RewriteEngine On
+  RewriteBase /ptoda_booking_api/
+
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^(.*)$ index.php [QSA,L]
+  ```
+
+- **Prevention tip:** Whenever an Apache app lives in a subdirectory (not the document root), always add `RewriteBase /your-folder/`. Without it, `mod_rewrite` rewrites relative to `/` which breaks sub-path routing entirely.
+
+---
+
+### [BUG-016] Android app blocked from HTTP requests on physical device (cleartext traffic policy)
+
+- **Date:** 2026-03-21
+- **Phase:** Phase 4 — Networking / Phase 5 — Integration Testing
+- **File(s) affected:** `app/src/main/res/xml/network_security_config.xml` _(new)_, `app/src/main/AndroidManifest.xml`
+- **Description:** Android app silently fails all API calls on a physical device (Android 9+). No network error shown; requests never reach the server. The root cause is Android's default `CLEARTEXT_NOT_PERMITTED` policy for HTTP (non-HTTPS) traffic, which was introduced in Android 9 (API 28).
+- **Root cause:** Android 9+ blocks all cleartext (HTTP) traffic by default unless explicitly allowed. Our PHP API runs on plain HTTP (`http://192.168.0.100/...`).
+- **Fix applied:**
+  1. Created `app/src/main/res/xml/network_security_config.xml` to permit cleartext traffic only to the local PC IP:
+     ```xml
+     <network-security-config>
+         <domain-config cleartextTrafficPermitted="true">
+             <domain includeSubdomains="false">192.168.0.100</domain>
+         </domain-config>
+     </network-security-config>
+     ```
+  2. Referenced it in `AndroidManifest.xml` on the `<application>` tag:
+     `android:networkSecurityConfig="@xml/network_security_config"`
+- **Prevention tip:** Always add a network security config when testing against a local HTTP server. In production, use HTTPS and remove this config.
+
+---
+
+### [BUG-017] `Constants.kt` `BASE_URL` pointing to Android emulator address on physical device
+
+- **Date:** 2026-03-21
+- **Phase:** Phase 4 — Networking / Phase 5 — Integration Testing
+- **File(s) affected:** `app/src/main/java/com/example/mbptodabookingapp/utils/Constants.kt`
+- **Description:** App on physical phone cannot reach the API. The `BASE_URL` was set to `http://10.0.2.2/ptoda_booking_api/` which is the emulator loopback alias for the host PC — meaningless on a real device.
+- **Root cause:** `BASE_URL` was left pointing to `BASE_URL_EMULATOR` after emulator development and was not switched before physical device testing.
+- **Fix applied:** Changed active `BASE_URL` constant to `BASE_URL_DEVICE = "http://192.168.0.100/ptoda_booking_api/"` (PC's LAN IP on the shared Wi-Fi network). Also corrected the `BASE_URL_DEVICE` placeholder which had `192.168.1.x`.
+- **Prevention tip:** Always update `BASE_URL` before switching between emulator and physical device. Consider using a Gradle `buildConfigField` or a runtime toggle to avoid this in future.
+
+---
+
+### [BUG-018] PHP `POST /auth/login` response missing `status` field — Android `LoggedInUser` parse failure
+
+- **Date:** 2026-03-21
+- **Phase:** Phase 3 — PHP Backend / Phase 4 — Auth Screens
+- **File(s) affected:** `controllers/AuthController.php` (PHP), `data/models/User.kt` (Android)
+- **Description:** Android `AuthRepository.login()` succeeds but the `LoggedInUser` object has a null/empty `status` field. Gson silently assigns null to a non-nullable Kotlin `String` property, potentially causing `NullPointerException` downstream when status is checked.
+- **Root cause:** The PHP `AuthController::login()` response body included `id`, `name`, `email`, `role` in the `user` object but omitted `status`. The Android `LoggedInUser` data class declares `status: String` (non-nullable).
+- **Fix applied:** Added `'status' => $user['status']` to the PHP login response user object:
+  ```php
+  'user' => [
+      'id'     => $user['id'],
+      'name'   => $user['name'],
+      'email'  => $user['email'],
+      'role'   => $user['role'],
+      'status' => $user['status'],   // ← added
+  ],
+  ```
+- **Prevention tip:** When writing a PHP API response, always cross-reference the matching Android data class field-by-field. Any non-nullable Kotlin field with no matching JSON key will silently become null at runtime (Gson bypasses Kotlin null safety).
 
 ---
 

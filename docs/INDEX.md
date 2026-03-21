@@ -35,13 +35,17 @@ docs/
 
 ## 🔌 API Base URL
 
-| Context                        | URL                                     |
-| ------------------------------ | --------------------------------------- |
-| Localhost (browser / Postman)  | `http://localhost/ptoda_booking_api/`   |
-| PHP dev server (recommended)   | `http://localhost:8001/`                |
-| Android Emulator → host PC     | `http://10.0.2.2/ptoda_booking_api/`    |
-| Android Emulator → PHP dev srv | `http://10.0.2.2:8001/`                 |
-| Physical device (same Wi-Fi)   | `http://192.168.x.x/ptoda_booking_api/` |
+| Context                        | URL                                                    |
+| ------------------------------ | ------------------------------------------------------ |
+| Localhost (browser / Postman)  | `http://localhost/ptoda_booking_api/`                  |
+| PHP dev server (alternative)   | `http://localhost:8001/`                               |
+| Android Emulator → host PC     | `http://10.0.2.2/ptoda_booking_api/`                   |
+| Android Emulator → PHP dev srv | `http://10.0.2.2:8001/`                                |
+| Physical device (same Wi-Fi)   | `http://192.168.0.100/ptoda_booking_api/` ✅ Confirmed |
+
+> **Active `BASE_URL` in `Constants.kt`:** `BASE_URL_DEVICE` = `http://192.168.0.100/ptoda_booking_api/`
+> **Network:** PC `192.168.0.100` · Phone `192.168.0.102` · Same Wi-Fi
+> **Apache mod_rewrite:** ✅ Working — `RewriteBase /ptoda_booking_api/` set in `.htaccess`
 
 ---
 

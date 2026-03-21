@@ -87,11 +87,13 @@
 
 ### 3.6 Testing API (Postman / Thunder Client) - DETAILED POSTMAN GUIDE
 
-**Working URL**: `http://localhost:8001` (PHP dev server - RECOMMENDED)
+**Working URL (XAMPP Apache — ✅ CONFIRMED WORKING)**: `http://localhost/ptoda_booking_api`
 
-**Apache Alt**: `http://localhost/ptoda_booking_api` (after mod_rewrite full fix)
+> `.htaccess` `RewriteBase` fix applied 2026-03-21 — all routes now route correctly via Apache.
 
-**Run server**: `cd c:/xampp/htdocs/ptoda_booking_api && php -S localhost:8001`
+**PHP Dev Server Alt**: `http://localhost:8001` (run: `cd c:/xampp/htdocs/ptoda_booking_api && php -S localhost:8001`)
+
+**From Physical Device (same Wi-Fi)**: `http://192.168.0.100/ptoda_booking_api`
 
 **Headers** (all requests): `Content-Type: application/json`
 
@@ -526,7 +528,7 @@ Body: { "email": "driver@test.com", "password": "password123" }
 ### 4.10 Google Maps API
 
 - [~] **4.10.1** Enable Maps SDK for Android in Google Cloud Console _(manual step — go to console.cloud.google.com → APIs & Services → Enable "Maps SDK for Android")_
-- [~] **4.10.2** Get API key, add to `AndroidManifest.xml` as `<meta-data>` _(placeholder added — replace `YOUR_MAPS_API_KEY` with real key from Google Cloud Console)_
+- [x] **4.10.2** Get API key, add to `AndroidManifest.xml` as `<meta-data>` — ✅ Real key from `google-services.json` set on 2026-03-21 (`AIzaSyD4we-...`). Enable "Maps SDK for Android" in Google Cloud Console if map tiles still show errors.
 - [x] **4.10.3** Add `SupportMapFragment` in passenger and driver screens
 - [x] **4.10.4** Implement location permission request (`ACCESS_FINE_LOCATION`)
 - [x] **4.10.5** Show user's current location on map with `FusedLocationProviderClient`
@@ -542,12 +544,12 @@ Body: { "email": "driver@test.com", "password": "password123" }
 
 ## Phase 5 — Integration Testing
 
-- [ ] **5.1** Run PHP API on XAMPP, connect Android emulator using `10.0.2.2`
-- [ ] **5.2** Test register + login flow end-to-end
+- [x] **5.1** Run PHP API on XAMPP, connect Android — Apache mod_rewrite confirmed working (2026-03-21). Physical device uses `http://192.168.0.100/ptoda_booking_api/`
+- [~] **5.2** Test register + login flow end-to-end — API tested and confirmed working via LAN IP. Android build ready; install APK on phone to complete.
 - [ ] **5.3** Test full ride booking flow (passenger → driver → complete)
 - [ ] **5.4** Test FCM notification delivery on ride request acceptance
 - [ ] **5.5** Test Admin user management endpoints
-- [ ] **5.6** Test on a physical Android device (use PC local IP)
+- [~] **5.6** Test on a physical Android device (PC: 192.168.0.100 · Phone: 192.168.0.102) — network config fixed, firewall rule added, APK build ready
 
 ---
 
@@ -563,4 +565,30 @@ Body: { "email": "driver@test.com", "password": "password123" }
 
 ---
 
-_Last updated: 2026-03-19 — Phase 4.1–4.9 Android app built. Pending: Gradle sync, Maps API key, FCM test, integration testing._
+_Last updated: 2026-03-21 — Physical device setup complete. All login/register fixes applied. Build and install APK to complete Phase 5.2 / 5.6._
+
+---
+
+### 📱 Physical Device Setup — `192.168.0.100` (PC) → `192.168.0.102` (Phone)
+
+| Fix                                                    | File(s)                                       | Status     |
+| ------------------------------------------------------ | --------------------------------------------- | ---------- |
+| `BASE_URL` → `http://192.168.0.100/ptoda_booking_api/` | `utils/Constants.kt`                          | ✅         |
+| Allow HTTP cleartext traffic (Android 9+)              | `res/xml/network_security_config.xml` _(new)_ | ✅         |
+| Reference network security config                      | `AndroidManifest.xml`                         | ✅         |
+| Maps API key (from `google-services.json`)             | `AndroidManifest.xml`                         | ✅         |
+| `google-services.json` copied to `app/`                | `app/google-services.json`                    | ✅         |
+| `.htaccess` `RewriteBase` for Apache sub-path routing  | `ptoda_booking_api/.htaccess`                 | ✅         |
+| `status` field in login response                       | `controllers/AuthController.php`              | ✅         |
+| Windows Firewall — port 80 inbound rule                | System                                        | ✅         |
+| XAMPP Apache + MySQL                                   | XAMPP Control Panel                           | ✅ Running |
+
+**Test accounts** (password = `password123` for all):
+
+| Email                | Role              | Expected screen          |
+| -------------------- | ----------------- | ------------------------ |
+| `passenger@test.com` | passenger         | `PassengerHomeActivity`  |
+| `pedro@test.com`     | driver (approved) | `DriverHomeActivity`     |
+| `admin@ptoda.local`  | admin             | `AdminDashboardActivity` |
+
+**To run on phone:** In Android Studio → **Build → Clean Project** → **▶ Run** with phone in USB debug mode.

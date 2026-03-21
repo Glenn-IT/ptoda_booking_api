@@ -145,10 +145,11 @@ PTODAApp/
 ## 🔌 API Base URL (Local Development)
 
 ```
-http://10.0.2.2/ptoda_booking_api/   (Android Emulator → localhost)
-http://192.168.x.x/ptoda_booking_api/ (Physical device → PC IP)
+http://localhost/ptoda_booking_api/          (Browser / Postman — Apache ✅ Confirmed)
+http://10.0.2.2/ptoda_booking_api/           (Android Emulator → localhost)
+http://192.168.0.100/ptoda_booking_api/      (Physical device → PC LAN IP ✅ Active)
 ```
 
 ---
 
-_Last updated: 2026-03-17_
+_Last updated: 2026-03-21_

@@ -248,14 +248,56 @@ class PTODAApplication : Application() {
 
 ## 8. Base URL Reference
 
-| Where you're running      | Use this BASE_URL                       |
-| ------------------------- | --------------------------------------- |
-| Android Emulator + Apache | `http://10.0.2.2/ptoda_booking_api/`    |
-| Android Emulator + php -S | `http://10.0.2.2:8001/`                 |
-| Physical device + Apache  | `http://192.168.x.x/ptoda_booking_api/` |
-| Physical device + php -S  | `http://192.168.x.x:8001/`              |
+| Where you're running      | Use this BASE_URL                                   |
+| ------------------------- | --------------------------------------------------- |
+| Android Emulator + Apache | `http://10.0.2.2/ptoda_booking_api/`                |
+| Android Emulator + php -S | `http://10.0.2.2:8001/`                             |
+| Physical device + Apache  | `http://192.168.0.100/ptoda_booking_api/` ✅ Active |
+| Physical device + php -S  | `http://192.168.0.100:8001/`                        |
 
-> Run `ipconfig` on Windows to find your PC's local IP for physical device testing.
+> **Active constant in `Constants.kt`:** `BASE_URL = BASE_URL_DEVICE`
+> PC IP: `192.168.0.100` · Phone IP: `192.168.0.102` · Same Wi-Fi network
+
+---
+
+## 9. Network Security Config (Physical Device / HTTP)
+
+Android 9+ (API 28+) blocks all HTTP (cleartext) traffic by default.
+For local development against a non-HTTPS backend, create a network security config:
+
+**`app/src/main/res/xml/network_security_config.xml`** ✅ Created
+
+```xml
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <!-- Local dev PC running XAMPP Apache -->
+        <domain includeSubdomains="false">192.168.0.100</domain>
+    </domain-config>
+</network-security-config>
+```
+
+**`AndroidManifest.xml`** — reference on `<application>` tag:
+
+```xml
+<application
+    android:networkSecurityConfig="@xml/network_security_config"
+    ...>
+```
+
+> ⚠️ **Remove or restrict this before publishing to production.** Use HTTPS in production.
+
+---
+
+## 10. Windows Firewall (Physical Device Access)
+
+For a physical phone to reach XAMPP Apache on port 80, add an inbound firewall rule:
+
+```powershell
+# Run as Administrator
+netsh advfirewall firewall add rule name="XAMPP Apache HTTP 80" dir=in action=allow protocol=TCP localport=80
+```
+
+✅ Rule added 2026-03-21.
 
 ---
 
@@ -269,4 +311,4 @@ class PTODAApplication : Application() {
 
 ---
 
-_Last updated: 2026-03-18_
+_Last updated: 2026-03-21_
