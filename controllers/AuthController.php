@@ -109,10 +109,11 @@ class AuthController {
         Response::success([
             'token' => $token,
             'user'  => [
-                'id'    => $user['id'],
-                'name'  => $user['name'],
-                'email' => $user['email'],
-                'role'  => $user['role'],
+                'id'     => $user['id'],
+                'name'   => $user['name'],
+                'email'  => $user['email'],
+                'role'   => $user['role'],
+                'status' => $user['status'],
             ],
         ], 'Login successful.');
     }

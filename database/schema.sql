@@ -114,7 +114,7 @@ INSERT INTO users (name, email, password, role, status)
 VALUES (
     'PTODA Admin',
     'admin@ptoda.local',
-    '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', -- password: password
+    '$2y$10$FUblXxX0ntMZSK8Uvyad6OiBpOmxEld4/g0A84pibfv19IA0NxUf.', -- password: admin123
     'admin',
     'active'
 ) ON DUPLICATE KEY UPDATE id = id;

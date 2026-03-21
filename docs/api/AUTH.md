@@ -213,4 +213,18 @@ suspend fun login(@Body body: LoginRequest): ApiResponse<LoginResponse>
 
 ---
 
-_Last updated: 2026-03-18_
+## 🔑 Seeded Admin Account
+
+| Field    | Value               |
+| -------- | ------------------- |
+| Email    | `admin@ptoda.local` |
+| Password | `admin123`          |
+| Role     | `admin`             |
+
+> ⚠️ The hash in `database/schema.sql` must be generated with `password_hash('admin123', PASSWORD_BCRYPT)`.
+> Never copy a hash from an example or another project — it will not match.
+> See **BUG-014** in `BUGS_AND_FIXES.md` for the full details of this issue.
+
+---
+
+_Last updated: 2026-03-21_

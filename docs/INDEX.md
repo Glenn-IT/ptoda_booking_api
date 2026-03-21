@@ -125,4 +125,4 @@ Tokens are obtained from `POST /auth/login`. Roles encoded in the JWT payload:
 
 ---
 
-_Last updated: 2026-03-18_
+_Last updated: 2026-03-21_

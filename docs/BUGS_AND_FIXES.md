@@ -203,5 +203,21 @@
 
 ---
 
-_Last updated: 2026-03-17_
+### [BUG-014] Admin login returns "Invalid email or password" — broken password hash in schema.sql
+
+- **Date:** 2026-03-21
+- **Phase:** Phase 3 — PHP REST API (Auth)
+- **File(s) affected:** `database/schema.sql`
+- **Description:** `POST /auth/login` with `admin@ptoda.local` / `admin123` returned `401 Invalid email or password` even though the account existed in the database.
+- **Root cause:** The bcrypt hash seeded in `schema.sql` (`$2y$10$92IXUNpkjO0rOQ5byMi...`) was a well-known Laravel placeholder hash that maps to the password `password`, **not** `admin123` as the comment claimed. The schema comment was misleading and the hash was never regenerated correctly before the initial import.
+- **Fix applied:**
+  1. Confirmed the mismatch by running `password_verify()` against the live DB hash — `password` returned `true`, `admin123` returned `false`.
+  2. Generated a correct hash: `password_hash('admin123', PASSWORD_BCRYPT)`.
+  3. Updated `database/schema.sql` with the correct hash for future imports.
+  4. Applied the fix directly to the live DB via SQL `UPDATE` — no re-import needed.
+- **Prevention tip:** Never copy-paste bcrypt hashes from examples or other projects. Always generate the hash fresh with `password_hash()` and verify it immediately with `password_verify()` before committing to `schema.sql`.
+
+---
+
+_Last updated: 2026-03-21_
 _Add new entries above this line as issues are discovered._
